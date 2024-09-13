@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./info_card.css";
 import axios from "axios";
-import imagePath from "../../../uploads/file-1684405353607-923478245.JPG";
 
 const Info_Card = () => {
   const [currentDate, setCurrentDate] = useState("");
@@ -68,7 +67,7 @@ const Info_Card = () => {
       <div className="info_card">
         <div className="card1_back">
           <div className="profile_pic">
-          <img src={imagePath} alt="Profile Picture" />
+          {/* <img src={imagePath} alt="Profile Picture" /> */}
           </div>
           <h3 className="profile_pic_h2">{customerinfo.fname} {customerinfo.lname}</h3>
           <h3>{customerinfo.email}</h3>

@@ -5,27 +5,9 @@ import {verifyAdmin, verifyToken, verifyUser } from "../../utils/verifyToken.js"
 const router = express.Router();
 
 
-
-// router.get("/checkauthentication", verifyToken, (req, res,next) => {
-//   res.send("Hi You are authenticated")
-// })
-
-router.get("/checkauthentication", verifyToken);
-
-router.get("/checkuser/:id", verifyUser, (req, res,next) => {
-  res.send("Hi Yoy can do anuthing")
-})
-router.get("/checkadmin/:id", verifyAdmin, (req, res,next) => {
-  res.send("Hi admin You can do anything")
-})
-
-
 //create
 router.post("/",createCustomer);
 // //upload pic
-// router.post("/upload", uploadProfilePic)
-
-
 //UPDATE name
 router.put("/updatename/:id", updateCustomer_name)
 

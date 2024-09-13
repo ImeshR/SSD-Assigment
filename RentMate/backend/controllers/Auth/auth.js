@@ -40,14 +40,22 @@ export const login = async (req, res, next) => {
         if (!isPasswordCorrect)
             return next(createError(400, "Invalid credentials"));
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        const { password, ...others } = user._doc;
+        // const token = await jwt.sign({ user }, process.env.JWT_SECRET);
+
+        const token = await jwt.sign(
+            {
+              id: user._id,
+              fname: user.fname,
+              lname: user.lname,
+              email: user.email,
+              role: user.role,
+            },
+            process.env.JWT_SECRET,
+            //expires in 1 min
+            { expiresIn: "1m" }
+          );
         
-        res.cookie("access_token", token, {
-            httpOnly: true,
-            sameSite: "none",  // Set SameSite to "none" to allow cross-site requests (for example, between different domains).
-            secure: true,      // Set secure to true to ensure the cookie is only sent over HTTPS.
-        }).status(200).json({...others});
+        res.status(200).json({ token });
     } catch (err) {
         next(err);
     }

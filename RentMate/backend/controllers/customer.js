@@ -6,25 +6,6 @@ import bcrypt from "bcrypt";
 // import Usermanage from "../models/Usermanage/Usermanage.js";
 import Reservation from '../models/Payment/reservation.js'
 
-
-// // profile pic upload
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './controllers/uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//         cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.originalname.split('.').pop());
-//     }
-// });
-// const upload = multer({ storage: storage });
-
-// export const uploadProfilePic = upload.single('avatar');
-
-
-
-//full user details upload with profile pic  
-  // const upload = multer({ storage: storage });
   
   export const UpdateCustomer = async (req, res) => {
     upload.single('avatar')(req, res, async function (err) {
@@ -53,29 +34,6 @@ import Reservation from '../models/Payment/reservation.js'
   };
   
 
-
-
-
-// //insert user data Original Code
-// export const createCustomer = async (req, res) => {
-//     const { userid,fname, lname, email, phone, address, city,avatar } = req.body;
-//     try {
-//         const newCustomer = new Customer({
-//         userid,
-//         fname,
-//         lname,
-//         email,
-//         phone,
-//         address,
-//         city,
-//         avatar
-//         });
-//         await newCustomer.save();
-//         res.status(201).json(newCustomer);
-//     } catch (error) {
-//         res.status(409).json({ message: error.message });
-//     }
-// }
 
 export const createCustomer = async (req, res) => {
   const { userid } = req.body;
@@ -107,7 +65,7 @@ export const updateCustomer_name = async (req, res) => {
 
     const updateCustomer = { fname, lname, _id: id }
 
-    const update = await Customer.findByIdAndUpdate(id, updateCustomer)
+    await Customer.findByIdAndUpdate(id, updateCustomer)
     .then(() => {  
         res.status(200).send({ status: "User Updated"});
     })

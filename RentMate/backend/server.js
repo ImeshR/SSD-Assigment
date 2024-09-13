@@ -18,6 +18,7 @@ import bookingRouter from "./routes/Booking/Booking.js";
 import cardRouter from "./routes/Payment/Cards.js";
 import cardDetailsRouter from "./routes/Payment/Cards.js";
 import reservationDetailRouter from "./routes/Payment/Reservations.js";
+import { authenticateUser } from "./middleware/authMiddleware.js";
 
 
 const app = express();
@@ -47,24 +48,32 @@ mongoose.connection.on("disconected", () => {
 app.use(cookiePaser());
 app.use(express.json());
 
-// const cardRouter = require("./routes/Payment/Cards.js")
-app.use("/card", cardDetailsRouter);
-app.use("/reservation", reservationDetailRouter);
 
-app.use("/api/customer", customerRouter);
-app.use("/api/manageListings", manageListingRouter);
+
+//Done 
+app.use("/api/auth", authRouter);
+
+//Pending 
+app.use("/api/customer", authenticateUser, customerRouter);
+
+// const cardRouter = require("./routes/Payment/Cards.js")
+app.use("/card", authenticateUser, cardDetailsRouter);
+app.use("/reservation", authenticateUser, reservationDetailRouter);
+
+
+app.use("/api/manageListings", authenticateUser, manageListingRouter);
 app.use("/api/Furniture", managefurnitureRouter);
 app.use("/api/Showroom", manageshowroomRouter);
 app.use("/api/landlordinfo", manageListingRouter);
-app.use("/api/auth", authRouter);
+
 app.use("/api/blog", blogRouter);
 //supportCenter
-app.use("/api/problems", problemsRouter);
+app.use("/api/problems", authenticateUser, problemsRouter);
 //lawyer
 app.use("/api/lawyer",lawyerRouter);
 app.use("/api/userr", userRouter);
 app.use("/api/vehi",manageVehicleRouter);
-app.use("/api/bookingVehicle",bookingRouter);
+app.use("/api/bookingVehicle", authenticateUser,bookingRouter);
 
 // Error handling
 app.use((err, req, res, next) => {

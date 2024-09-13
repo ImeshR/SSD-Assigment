@@ -24,13 +24,19 @@ const Properties = () => {
     // Fetch data from the API endpoint
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:7070/api/manageListings/"
-        );
+        const response = await fetch("http://localhost:7070/api/manageListings/");
         const data = await response.json();
-        setPropertyData(data);
+
+        // Ensure that the data is an array before setting it in the state
+        if (Array.isArray(data)) {
+          setPropertyData(data);
+        } else {
+          console.log("API response is not an array:", data);
+          setPropertyData([]); // Set to an empty array if the data is invalid
+        }
       } catch (error) {
-        console.log(error);
+        console.log("Error fetching property data:", error);
+        setPropertyData([]); // Fallback to an empty array on error
       }
     };
 
@@ -81,34 +87,38 @@ const Properties = () => {
         {/* Iterate over propertyData and display the fetched data */}
         <div className={styles.cards}>
           <div className={styles.row}>
-            {propertyData.slice(0, 4).map((property, index) => (
-              <div
-                className={`${styles.column} ${styles.column4}`}
-                key={property.id}
-              >
-                <div className={styles.imageview}>
-                  <span
-                    className={styles.link}
-                    onClick={() => navigateToProperty(property._id)}
-                  >
-                    <img
-                      src={randomImagePaths[index]}
-                      alt=""
-                      style={{ width: "340px", height: "250px" }}
-                    />
-                  </span>
+            {propertyData.length > 0 ? (
+              propertyData.slice(0, 4).map((property, index) => (
+                <div
+                  className={`${styles.column} ${styles.column4}`}
+                  key={property.id}
+                >
+                  <div className={styles.imageview}>
+                    <span
+                      className={styles.link}
+                      onClick={() => navigateToProperty(property._id)}
+                    >
+                      <img
+                        src={randomImagePaths[index]}
+                        alt=""
+                        style={{ width: "340px", height: "250px" }}
+                      />
+                    </span>
+                  </div>
+                  <div className={styles.smallinfo}>
+                    <span
+                      className={styles.link}
+                      onClick={() => navigateToProperty(property._id)}
+                    >
+                      <span>{property.name}</span>
+                    </span>
+                    <div className={styles.price}>${property.price}</div>
+                  </div>
                 </div>
-                <div className={styles.smallinfo}>
-                  <span
-                    className={styles.link}
-                    onClick={() => navigateToProperty(property._id)}
-                  >
-                    <span>{property.name}</span>
-                  </span>
-                  <div className={styles.price}>${property.price}</div>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div>No properties available</div>
+            )}
           </div>
         </div>
       </div>
