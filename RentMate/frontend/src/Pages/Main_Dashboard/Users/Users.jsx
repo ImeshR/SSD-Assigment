@@ -9,11 +9,9 @@ import { Toast } from "primereact/toast";
 import ReactToPrint from "react-to-print";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import axios from "axios";
 import UserDetailsReport from "../../../components/com.mainDashboard/UserReport/UserDetailsReport";
-
-
 
 const Users = () => {
   const items = [{ label: "Users", url: "/siteowner/users" }];
@@ -21,7 +19,6 @@ const Users = () => {
 
   const componentRef = useRef();
   const toast = useRef(null);
-
 
   const accept = () => {
     toast.current.show({
@@ -31,7 +28,6 @@ const Users = () => {
       life: 3000,
     });
   };
-
 
   const confirm = () => {
     confirmDialog({
@@ -43,21 +39,19 @@ const Users = () => {
     });
   };
 
-
-
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     function getUsers() {
       axios
-        .get(`http://localhost:7070/api/userr/`)
+        .get(`http://localhost:8080/api/userr/`)
         .then((res) => {
           const AllUsers = res.data.users;
-          setUsers(AllUsers)
+          setUsers(AllUsers);
           console.log(res.data.users);
         })
         .catch((err) => {
@@ -67,8 +61,7 @@ const Users = () => {
     getUsers();
   }, []);
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //  const [users, setUsers] = useState([]);
 
@@ -83,44 +76,38 @@ const Users = () => {
   // Delete Function Call
   const deleteUser = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete(`http://localhost:7070/api/userr/${id}`)
-          .then((res) => {
-            console.log(res);
-            console.log(res.data.users);
-          });
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        ).then((result) => {
-          if (result.isConfirmed) {
-            window.location.reload(false);
+        axios.delete(`http://localhost:8080/api/userr/${id}`).then((res) => {
+          console.log(res);
+          console.log(res.data.users);
+        });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
           }
-        })
+        );
       }
-    })
+    });
   };
 
   const updateFunc = (id) => {
-    navigate(`/siteowner/users/update-user-details`, { state: { id } })
-  }
-
-  
+    navigate(`/siteowner/users/update-user-details`, { state: { id } });
+  };
 
   return (
     <div>
       <div ref={componentRef}>
-        <UserDetailsReport/>
+        <UserDetailsReport />
       </div>
       <Toast ref={toast} />
       <ConfirmDialog />
@@ -135,7 +122,6 @@ const Users = () => {
         <hr className={styles.line} />
         <div className={styles.contentArea}>
           <div className={styles.contentbody}>
-
             <div className={styless.content}>
               <div className={styless.left_side}>
                 <input
@@ -147,7 +133,7 @@ const Users = () => {
                   onChange={handleSearchChange}
                 />
               </div>
-              
+
               <div className={styless.right_side}>
                 <ReactToPrint
                   trigger={() => (
@@ -168,7 +154,7 @@ const Users = () => {
                 </Link>
               </div>
             </div>
-            <div className={styless.table_content} >
+            <div className={styless.table_content}>
               <table>
                 <tr>
                   <th>Fist Name</th>
@@ -193,21 +179,29 @@ const Users = () => {
                         <Button label="Update" severity="success" raised />
                       </Link> */}
 
-                      <Button label="Update" severity="success" raised onClick={() => { updateFunc(data._id) }} />
+                      <Button
+                        label="Update"
+                        severity="success"
+                        raised
+                        onClick={() => {
+                          updateFunc(data._id);
+                        }}
+                      />
 
                       <Button
                         label="Delete"
                         severity="danger"
                         raised
-                        onClick={() => { deleteUser(data._id) }}
+                        onClick={() => {
+                          deleteUser(data._id);
+                        }}
                       />
                     </td>
                   </tr>
                 ))}
               </table>
             </div>
-
-         </div>
+          </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { BreadCrumb } from "primereact/breadcrumb";
 import styleees from "./update_userD.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 // import Validation from "./Validation";
 import axios from "axios";
 
@@ -23,7 +23,7 @@ const Update_userDetails = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const id = location.state.id
+  const id = location.state.id;
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -35,38 +35,35 @@ const Update_userDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(`http://localhost:7070/api/userr/${id}`)
+      await axios
+        .get(`http://localhost:8080/api/userr/${id}`)
         .then((response) => {
-          setFname(response.data.user.fname)
-          setLname(response.data.user.lname)
-          setContactNumber(response.data.user.contactNumber)
-          setEmail(response.data.user.email)
-          setRoll(response.data.user.roll)
-          setUsername(response.data.user.username)
-          setPassword(response.data.user.password)
+          setFname(response.data.user.fname);
+          setLname(response.data.user.lname);
+          setContactNumber(response.data.user.contactNumber);
+          setEmail(response.data.user.email);
+          setRoll(response.data.user.roll);
+          setUsername(response.data.user.username);
+          setPassword(response.data.user.password);
         })
-        .catch((err) => console.log(err))
-    }
+        .catch((err) => console.log(err));
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateFunction()
-    updateFunction()
-    Swal.fire(
-      'Success',
-      'User Updated Successfully',
-      'success'
-    ).then((result) => {
-      if (result.isConfirmed) {
-        navigate('/siteowner/users')
+    updateFunction();
+    updateFunction();
+    Swal.fire("Success", "User Updated Successfully", "success").then(
+      (result) => {
+        if (result.isConfirmed) {
+          navigate("/siteowner/users");
+        }
       }
-    }
-    )
+    );
   };
-
 
   const updateFunction = async () => {
     const userDetails = {
@@ -77,11 +74,14 @@ const Update_userDetails = () => {
       roll: roll,
       username: username,
       password: password,
-    }
-    await axios.put(`http://localhost:7070/api/userr/${id}`, userDetails)
+    };
+    await axios
+      .put(`http://localhost:8080/api/userr/${id}`, userDetails)
       .then((response) => console.log(response.data))
-      .catch((err) => { console.log(err); })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div>
@@ -101,28 +101,45 @@ const Update_userDetails = () => {
                 <div className={styleees.newUserTitle}>
                   <b>Update User Details</b>
                 </div>
-                <form className={styleees.newUserForm} onSubmit={handleSubmit} >
+                <form className={styleees.newUserForm} onSubmit={handleSubmit}>
                   <div className={styleees.newUserRow}>
                     <div className={styleees.newUserItem}>
                       <label>First Name</label>
-                      <input type="text" name="fname" defaultValue={fname} onChange={(e) => setFname(e.target.value)} />
+                      <input
+                        type="text"
+                        name="fname"
+                        defaultValue={fname}
+                        onChange={(e) => setFname(e.target.value)}
+                      />
                     </div>
                     <div className={styleees.newUserItem}>
                       <label>Last Name</label>
-                      <input type="text" name="lname" defaultValue={lname} onChange={(e) => setLname(e.target.value)} />
+                      <input
+                        type="text"
+                        name="lname"
+                        defaultValue={lname}
+                        onChange={(e) => setLname(e.target.value)}
+                      />
                     </div>
                   </div>
                   <div className={styleees.newUserRow}>
                     <div className={styleees.newUserItem}>
-                    <label>Email</label>
-                      <input type="email"  name="email" defaultValue={email} onChange={(e) => setEmail(e.target.value)} required disabled/>
-                      
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        defaultValue={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled
+                      />
                     </div>
                     <div className={styleees.newUserItem}>
                       <label>Contact Number</label>
                       <input
                         type="text"
-                        name="contactNumber" defaultValue={contactNumber}
+                        name="contactNumber"
+                        defaultValue={contactNumber}
                         onChange={(e) => setContactNumber(e.target.value)}
                       />
                       {/* {errors.contactNumber && (
@@ -135,7 +152,12 @@ const Update_userDetails = () => {
                   <div className={styleees.newUserRow}>
                     <div className={styleees.newUserItem}>
                       <label>Select Roll </label>
-                      <select name="roll" value={roll} className={styleees.selectRoll} onChange={(e) => setRoll(e.target.value)} >
+                      <select
+                        name="roll"
+                        value={roll}
+                        className={styleees.selectRoll}
+                        onChange={(e) => setRoll(e.target.value)}
+                      >
                         <option value="Site Owner">Site Owner</option>
                         <option value="Regular User">Regular User</option>
                         <option value="Landloard">Landloard</option>
@@ -147,12 +169,15 @@ const Update_userDetails = () => {
 
                     <div className={styleees.newUserItem}>
                       <label>Username</label>
-                      <input type="text" name="username" defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
-                      
+                      <input
+                        type="text"
+                        name="username"
+                        defaultValue={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
                     </div>
                   </div>
                   <div className={styleees.newUserRow}>
-
                     <button className={styleees.newUserButton}>Update</button>
                   </div>
                 </form>

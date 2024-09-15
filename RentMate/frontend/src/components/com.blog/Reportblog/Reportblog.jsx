@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./reportblog.module.css";
-import styless from '../../../Pages/Main_Dashboard/BlogManagement/BlogList.jsx'
+import styless from "../../../Pages/Main_Dashboard/BlogManagement/BlogList.jsx";
 import { Button } from "primereact/button";
 import axios from "axios";
 import { Tag } from "primereact/tag";
@@ -19,13 +19,13 @@ const Reportblog = () => {
     setSearchTerm(event.target.value);
   };
 
-//   const ListingName = (text) => {
-//     return text.substring(0, 20) + " ...";
-//   };
+  //   const ListingName = (text) => {
+  //     return text.substring(0, 20) + " ...";
+  //   };
 
-//   const LocationText = (text) => {
-//     return text.substring(0, 15) + " ...";
-//   };
+  //   const LocationText = (text) => {
+  //     return text.substring(0, 15) + " ...";
+  //   };
 
   const pickStatus = (status) => {
     if (status.toLowerCase() === "active") {
@@ -53,7 +53,7 @@ const Reportblog = () => {
   useEffect(() => {
     function getBlog() {
       axios
-        .get("http://localhost:7070/api/blog/")
+        .get("http://localhost:8080/api/blog/")
         .then((res) => {
           setblog(res.data);
           console.log(res.data);
@@ -74,7 +74,7 @@ const Reportblog = () => {
   return (
     <div>
       <div className={styles.contentbody}>
-      <div className={styles.CReportpage_header}>
+        <div className={styles.CReportpage_header}>
           <div className={styles.layer1}>
             <div className={styles.CReportpage_logo}>
               <div className={styles.CReportpage_logo_container}>
@@ -93,7 +93,16 @@ const Reportblog = () => {
                     <span>076-XXXXXXX</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faMobileScreen} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faMobileScreen}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -102,7 +111,16 @@ const Reportblog = () => {
                     <span>rentmatehelpdesk@gmail.com</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faEarthAmericas} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faEarthAmericas}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -113,7 +131,16 @@ const Reportblog = () => {
                     </span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faLocationCrosshairs}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -122,22 +149,20 @@ const Reportblog = () => {
         </div>
         <div className={styless.tablearea__content}>
           <table>
-              <tr>
-                <th>Title</th>
-                <th>Id</th>
-                <th>Content</th>
-                <th>Date</th>
-                
-              </tr>
-              {filteredData.map((data) => (
-                <tr key={data.id}>
-                  <td>{data.title}</td>
-                  <td>{data.idNo}</td>
-                  <td>{data.content}</td>
-                  <td>{data.date}</td>
-                  
-                  
-                  {/* <td>
+            <tr>
+              <th>Title</th>
+              <th>Id</th>
+              <th>Content</th>
+              <th>Date</th>
+            </tr>
+            {filteredData.map((data) => (
+              <tr key={data.id}>
+                <td>{data.title}</td>
+                <td>{data.idNo}</td>
+                <td>{data.content}</td>
+                <td>{data.date}</td>
+
+                {/* <td>
                     {data.image.length > 0 && (
                       <Image
                         src={data.image[0]}
@@ -149,11 +174,10 @@ const Reportblog = () => {
                       />
                     )}
                   </td> */}
-                  
-                </tr>
-              ))}
-            </table>
-           </div>
+              </tr>
+            ))}
+          </table>
+        </div>
       </div>
     </div>
   );

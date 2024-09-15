@@ -22,7 +22,7 @@ const Login = () => {
     setError(validation(values));
 
     axios
-      .post(`http://localhost:7070/api/userr/login`, values)
+      .post(`http://localhost:8080/api/userr/login`, values)
       .then((res) => {
         console.log(res.data);
         localStorage.setItem("id", res.data._id);

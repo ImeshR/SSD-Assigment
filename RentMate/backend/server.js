@@ -10,20 +10,19 @@ import cookiePaser from "cookie-parser";
 import blogRouter from "./routes/Blog/blog.js";
 import problemsRouter from "./routes/SupportCenter/Problems/ManageProblems.js";
 import lawyerRouter from "./routes/Lawyer/lawyer.js";
-import managefurnitureRouter from "./routes/Showroom/Furniture/ManageFurniture.js"
-import manageshowroomRouter from "./routes/Showroom/Create_Showroom/ManageShowroom.js"
-import userRouter from "./routes/Usermanage/UserList.js"
+import managefurnitureRouter from "./routes/Showroom/Furniture/ManageFurniture.js";
+import manageshowroomRouter from "./routes/Showroom/Create_Showroom/ManageShowroom.js";
+import userRouter from "./routes/Usermanage/UserList.js";
 import manageVehicleRouter from "./routes/Vehicle/ManageVehicle.js";
 import bookingRouter from "./routes/Booking/Booking.js";
 import cardRouter from "./routes/Payment/Cards.js";
 import cardDetailsRouter from "./routes/Payment/Cards.js";
 import reservationDetailRouter from "./routes/Payment/Reservations.js";
 
-
 const app = express();
-app.use(cors())
+app.use(cors());
 dotenv.config();
-const PORT = process.env.PORT || 7070;
+const PORT = process.env.PORT || 8080;
 app.use(bodyParser.json());
 
 const URL = process.env.MONGODB;
@@ -61,10 +60,10 @@ app.use("/api/blog", blogRouter);
 //supportCenter
 app.use("/api/problems", problemsRouter);
 //lawyer
-app.use("/api/lawyer",lawyerRouter);
+app.use("/api/lawyer", lawyerRouter);
 app.use("/api/userr", userRouter);
-app.use("/api/vehi",manageVehicleRouter);
-app.use("/api/bookingVehicle",bookingRouter);
+app.use("/api/vehi", manageVehicleRouter);
+app.use("/api/bookingVehicle", bookingRouter);
 
 // Error handling
 app.use((err, req, res, next) => {

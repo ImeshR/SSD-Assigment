@@ -1,25 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../../components/com.showRoom/sidebar/Sidebar";
 import styles from "../../../components/com.style/contentArea.module.css";
-import styless from './showroomfurn.module.css';
+import styless from "./showroomfurn.module.css";
 
 import { BreadCrumb } from "primereact/breadcrumb";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 // import React, { useRef } from 'react';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 import ReactToPrint from "react-to-print";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { Tag } from "primereact/tag";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 // import { ConfirmDialog } from "primereact/confirmdialog"; // For <ConfirmDialog /> component
 // import { confirmDialog } from "primereact/confirmdialog"; // For confirmDialog method
 import axios from "axios";
 import FurnitureReport from "../../../components/com.showRoom/FurnitureReport/FurnitureReport";
 
 const ShowroomFurnitures = () => {
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,21 +26,21 @@ const ShowroomFurnitures = () => {
     if (paymentStatus === "false") {
       navigate("/showroomOwner/subscription");
       Swal.fire(
-        'Problem!',
-        'You have to pay the subscription fee first!',
-        'error'
-      )
+        "Problem!",
+        "You have to pay the subscription fee first!",
+        "error"
+      );
     }
   }, []);
 
   const [values, setValues] = useState({
-    name: '',
-    email: '',
-    contactNumber: '',
-    address: '',
-    city: '',
-    openingTime: '',
-    image: '',
+    name: "",
+    email: "",
+    contactNumber: "",
+    address: "",
+    city: "",
+    openingTime: "",
+    image: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -58,7 +57,6 @@ const ShowroomFurnitures = () => {
     });
   };
 
-
   const confirm = () => {
     confirmDialog({
       message: "Do you want to delete this record?",
@@ -71,15 +69,13 @@ const ShowroomFurnitures = () => {
 
   const confirm2 = () => {
     confirmDialog({
-      message: 'Do you want to delete this record?',
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptClassName: 'p-button-danger',
+      message: "Do you want to delete this record?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      acceptClassName: "p-button-danger",
       accept,
-
     });
   };
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (event) => {
@@ -88,17 +84,15 @@ const ShowroomFurnitures = () => {
 
   const [furniture, setFurniture] = useState([]);
 
-  const items = [
-    { label: "Furniture", url: "/showroomOwner/furnitures" }
-  ];
+  const items = [{ label: "Furniture", url: "/showroomOwner/furnitures" }];
   const home = { icon: "pi pi-th-large", url: "/showroomOwner" };
 
-  const showroomId = localStorage.getItem('showroomId')
+  const showroomId = localStorage.getItem("showroomId");
 
   useEffect(() => {
     function getFurniture() {
       axios
-        .get(`http://localhost:7070/api/Furniture/showroom/${showroomId}`)
+        .get(`http://localhost:8080/api/Furniture/showroom/${showroomId}`)
         .then((res) => {
           setFurniture(res.data);
           console.log(res.data);
@@ -118,15 +112,14 @@ const ShowroomFurnitures = () => {
   });
 
   //update Function call
-  const updateFunc = id => {
-    navigate('/showroomOwner/furnitures/update-furniture', { state: { id } })
-  }
-
+  const updateFunc = (id) => {
+    navigate("/showroomOwner/furnitures/update-furniture", { state: { id } });
+  };
 
   // Delete Function Call
   // const deleteFurniture = (id) => {
   //   axios
-  //     .delete(`http://localhost:7070/api/Furniture/${id}`)
+  //     .delete(`http://localhost:8080/api/Furniture/${id}`)
   //     .then((res) => {
 
   //       console.log(res);
@@ -137,36 +130,32 @@ const ShowroomFurnitures = () => {
 
   const deleteFurniture = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .delete(`http://localhost:7070/api/Furniture/${id}`)
-      .then((res) => {
-
-        console.log(res);
-        console.log(res.data);
-       // window.location.reload();
-      });
-      Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+        axios
+          .delete(`http://localhost:8080/api/Furniture/${id}`)
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+            // window.location.reload();
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
+        );
+      }
+    });
   };
-
 
   // function handleFilter(event) {
   //   const result = data.filter((record) => {
@@ -180,7 +169,7 @@ const ShowroomFurnitures = () => {
     <div>
       <Sidebar />
       <div ref={componentRef}>
-      <FurnitureReport/>
+        <FurnitureReport />
       </div>
       <div className={styles.content}>
         <div className={styles.text}>Furnitures</div>
@@ -194,7 +183,6 @@ const ShowroomFurnitures = () => {
           <Toast ref={toast} />
           <ConfirmDialog />
           <div className={styles.contentbody}>
-
             <div className={styless.top__content}>
               <div className={styless.left__side}>
                 <input
@@ -226,7 +214,7 @@ const ShowroomFurnitures = () => {
                 </Link>
               </div>
             </div>
-            <div className={styless.tablearea__content} >
+            <div className={styless.tablearea__content}>
               <table>
                 <tr>
                   <th>Name</th>
@@ -238,11 +226,10 @@ const ShowroomFurnitures = () => {
                 </tr>
                 {filteredData.map((data) => (
                   <tr key={data.id}>
-                    <td>{(data.name)}</td>
-                    <td>{(data.price)}</td>
-                    <td>{(data.quantity)}</td>
-                    <td>{(data.Category)}</td>
-
+                    <td>{data.name}</td>
+                    <td>{data.price}</td>
+                    <td>{data.quantity}</td>
+                    <td>{data.Category}</td>
 
                     <td>
                       {data.images.length > 0 && (
@@ -258,14 +245,22 @@ const ShowroomFurnitures = () => {
                     </td>
 
                     <td>
-
-                      <Button label="Update" severity="success" raised onClick={() => { updateFunc(data._id) }} />
+                      <Button
+                        label="Update"
+                        severity="success"
+                        raised
+                        onClick={() => {
+                          updateFunc(data._id);
+                        }}
+                      />
 
                       <Button
                         label="Delete"
                         severity="danger"
                         raised
-                        onClick={() => { deleteFurniture(data._id) }}
+                        onClick={() => {
+                          deleteFurniture(data._id);
+                        }}
                       />
                     </td>
                   </tr>
@@ -277,8 +272,6 @@ const ShowroomFurnitures = () => {
       </div>
     </div>
   );
-
 };
-
 
 export default ShowroomFurnitures;

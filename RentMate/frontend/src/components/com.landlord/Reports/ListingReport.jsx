@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./listingReport.module.css";
-import istyles from '../../../Pages/Landlord_Dashboard/Listings/propertyListings.module.css'
+import istyles from "../../../Pages/Landlord_Dashboard/Listings/propertyListings.module.css";
 import { Button } from "primereact/button";
 import axios from "axios";
 import { Tag } from "primereact/tag";
@@ -53,7 +53,7 @@ const ListingReport = () => {
   useEffect(() => {
     function getListings() {
       axios
-        .get("http://localhost:7070/api/manageListings/")
+        .get("http://localhost:8080/api/manageListings/")
         .then((res) => {
           setListings(res.data);
           console.log(res.data);
@@ -74,7 +74,7 @@ const ListingReport = () => {
   return (
     <div>
       <div className={styles.contentbody}>
-      <div className={styles.CReportpage_header}>
+        <div className={styles.CReportpage_header}>
           <div className={styles.layer1}>
             <div className={styles.CReportpage_logo}>
               <div className={styles.CReportpage_logo_container}>
@@ -93,7 +93,16 @@ const ListingReport = () => {
                     <span>076-XXXXXXX</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faMobileScreen} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faMobileScreen}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -102,7 +111,16 @@ const ListingReport = () => {
                     <span>rentmatehelpdesk@gmail.com</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faEarthAmericas} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faEarthAmericas}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -113,14 +131,25 @@ const ListingReport = () => {
                     </span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faLocationCrosshairs}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <h4 style={{textAlign:'center', justifyContent:'center'}}><ul>All Properties Report</ul></h4>
+        <h4 style={{ textAlign: "center", justifyContent: "center" }}>
+          <ul>All Properties Report</ul>
+        </h4>
         <div className={istyles.tablearea__content}>
           <table>
             <tr>

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./bookingreport.module.css";
-import styless from '../../../Pages/VehicleOwner_Dashboard/Bookings/VehicleBookings.jsx'
+import styless from "../../../Pages/VehicleOwner_Dashboard/Bookings/VehicleBookings.jsx";
 import { Button } from "primereact/button";
 import axios from "axios";
 import { Tag } from "primereact/tag";
@@ -19,13 +19,13 @@ const BookingReport = () => {
     setSearchTerm(event.target.value);
   };
 
-//   const ListingName = (text) => {
-//     return text.substring(0, 20) + " ...";
-//   };
+  //   const ListingName = (text) => {
+  //     return text.substring(0, 20) + " ...";
+  //   };
 
-//   const LocationText = (text) => {
-//     return text.substring(0, 15) + " ...";
-//   };
+  //   const LocationText = (text) => {
+  //     return text.substring(0, 15) + " ...";
+  //   };
 
   const pickStatus = (status) => {
     if (status.toLowerCase() === "active") {
@@ -49,13 +49,12 @@ const BookingReport = () => {
     }
   };
 
-    
   const [bookingvehicles, setbookingVehicle] = useState([]);
-    
+
   useEffect(() => {
     function getbooking() {
       axios
-        .get("http://localhost:7070/api/bookingVehicle/")
+        .get("http://localhost:8080/api/bookingVehicle/")
         .then((res) => {
           setbookingVehicle(res.data);
           console.log(res.data);
@@ -66,19 +65,18 @@ const BookingReport = () => {
     }
     getbooking();
   }, []);
-  
+
   const filteredData = bookingvehicles.filter((data) => {
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const dataInfo =
       ` ${data.date} ${data.vin} ${data.pick} ${data.drop}`.toLowerCase();
     return searchTerms.every((term) => dataInfo.includes(term));
   });
-  
 
   return (
     <div>
       <div className={styles.contentbody}>
-      <div className={styles.CReportpage_header}>
+        <div className={styles.CReportpage_header}>
           <div className={styles.layer1}>
             <div className={styles.CReportpage_logo}>
               <div className={styles.CReportpage_logo_container}>
@@ -97,7 +95,16 @@ const BookingReport = () => {
                     <span>076-XXXXXXX</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faMobileScreen} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faMobileScreen}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -106,7 +113,16 @@ const BookingReport = () => {
                     <span>rentmatehelpdesk@gmail.com</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faEarthAmericas} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faEarthAmericas}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -117,35 +133,43 @@ const BookingReport = () => {
                     </span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faLocationCrosshairs}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-     
-        <div className={styless.tablearea__content} >
-              <table>
-                <tr>
 
-                  <th>Delivery Location</th>
-                  <th>Delivery Date</th>
-                  <th>Return Location</th>
-                  <th>Distance</th>
-                  <th>Price</th>
-                </tr>
-                {filteredData.map((data) => (
-                  <tr key={data._id}>
-                    <td>{data.deliveryLocation}</td>
-                    <td>{data.deliveryDate.split("T")[0]}</td>
-                    <td>{data.returnLocation}</td>
-                    <td>{data.distance}</td>
-                    <td>Rs.{data.amount}</td>
-                  </tr>
-                ))}
-              </table>
-            </div>
+        <div className={styless.tablearea__content}>
+          <table>
+            <tr>
+              <th>Delivery Location</th>
+              <th>Delivery Date</th>
+              <th>Return Location</th>
+              <th>Distance</th>
+              <th>Price</th>
+            </tr>
+            {filteredData.map((data) => (
+              <tr key={data._id}>
+                <td>{data.deliveryLocation}</td>
+                <td>{data.deliveryDate.split("T")[0]}</td>
+                <td>{data.returnLocation}</td>
+                <td>{data.distance}</td>
+                <td>Rs.{data.amount}</td>
+              </tr>
+            ))}
+          </table>
+        </div>
       </div>
     </div>
   );

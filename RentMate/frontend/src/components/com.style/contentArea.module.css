@@ -9,7 +9,7 @@
 .text {
   font-size: 30px;
   font-weight: 500;
-  color: #707070;
+  color: #808070;
 }
 
 .contentArea {
@@ -39,14 +39,14 @@
 .welcomemsg {
   font-size: 18px;
   font-weight: 500;
-  color: #707070;
-  background: #EFEFEF;
+  color: #808070;
+  background: #efefef;
   margin-top: 20px;
   width: fit-content;
   padding: 11px;
   border-radius: 6px;
 }
 
-.contentbody{
+.contentbody {
   padding-top: 22px;
 }

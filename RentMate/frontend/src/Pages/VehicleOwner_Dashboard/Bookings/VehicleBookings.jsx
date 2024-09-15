@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../../../components/com.vehicleOwner/sidebar/Sidebar";
 import styles from "../../../components/com.style/contentArea.module.css";
@@ -14,17 +13,11 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog"; // For 
 import axios from "axios";
 import BookingReport from "../../../components/com.vehicleOwner/ReportVehicleBooking/BookingReport";
 
-
-
 const VehicleBookings = () => {
   const componentRef = useRef();
 
-  const items = [
-    { label: "Bookings", url: "/vehicleOwner/bookings" }
-  ];
+  const items = [{ label: "Bookings", url: "/vehicleOwner/bookings" }];
   const home = { icon: "pi pi-th-large", url: "/vehicleOwner" };
-
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (event) => {
@@ -36,7 +29,7 @@ const VehicleBookings = () => {
   useEffect(() => {
     function getbooking() {
       axios
-        .get("http://localhost:7070/api/bookingVehicle/")
+        .get("http://localhost:8080/api/bookingVehicle/")
         .then((res) => {
           setbookingVehicle(res.data);
           console.log(res.data);
@@ -58,19 +51,18 @@ const VehicleBookings = () => {
   // Delete Function Call
   const deletebooking = (id) => {
     axios
-      .delete(`http://localhost:7070/api/bookingVehicle/${id}`)
+      .delete(`http://localhost:8080/api/bookingVehicle/${id}`)
       .then((res) => {
         console.log(res.data);
         window.location.reload();
       });
   };
 
-
   return (
     <div>
       <Sidebar />
       <div ref={componentRef}>
-        <BookingReport/>
+        <BookingReport />
       </div>
       <div className={styles.content}>
         <div className={styles.text}>Bookings</div>
@@ -82,7 +74,6 @@ const VehicleBookings = () => {
         <hr className={styles.line} />
         <div className={styles.contentArea}>
           <div className={styles.contentbody}>
-
             <div className={styless.top__content}>
               <div className={styless.left__side}>
                 <input
@@ -97,20 +88,19 @@ const VehicleBookings = () => {
             </div>
 
             <div className={styless.right__side}>
-                <ReactToPrint
-                  trigger={() => (
-                    <Button variant="contained" color="primary">
-                      Print
-                    </Button>
-                  )}
-                  content={() => componentRef.current}
-                />
-              </div>
+              <ReactToPrint
+                trigger={() => (
+                  <Button variant="contained" color="primary">
+                    Print
+                  </Button>
+                )}
+                content={() => componentRef.current}
+              />
+            </div>
 
-            <div className={styless.tablearea__content} >
+            <div className={styless.tablearea__content}>
               <table>
                 <tr>
-
                   <th>Delivery Location</th>
                   <th>Delivery Date</th>
                   <th>Return Location</th>
@@ -128,7 +118,6 @@ const VehicleBookings = () => {
                 ))}
               </table>
             </div>
-
           </div>
         </div>
       </div>

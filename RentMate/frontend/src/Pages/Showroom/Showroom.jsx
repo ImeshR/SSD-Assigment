@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Navbar from '../../components/navbar/Navbar'
-import Footer from '../../components/footer/Footer'
-import styles from './showroom.module.css'
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/footer/Footer";
+import styles from "./showroom.module.css";
 import { Dropdown } from "primereact/dropdown";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 const Showroom = () => {
-
   const { id } = useParams();
 
   const [showroom, setShowroom] = useState([]);
@@ -26,61 +25,64 @@ const Showroom = () => {
   const [others, setOthers] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:7070/api/furniture/showroom/${id}/category/chair`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/furniture/showroom/${id}/category/chair`)
+      .then((res) => {
         setChairs(res.data);
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
 
-    axios.get(`http://localhost:7070/api/furniture/showroom/${id}/category/bed`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/furniture/showroom/${id}/category/bed`)
+      .then((res) => {
         setBeds(res.data);
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
 
-    axios.get(`http://localhost:7070/api/furniture/showroom/${id}/category/table`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/furniture/showroom/${id}/category/table`)
+      .then((res) => {
         setTables(res.data);
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
 
-    axios.get(`http://localhost:7070/api/furniture/showroom/${id}/category/sofa`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/furniture/showroom/${id}/category/sofa`)
+      .then((res) => {
         setSofas(res.data);
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
 
-    axios.get(`http://localhost:7070/api/furniture/showroom/${id}/category/others`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/furniture/showroom/${id}/category/others`)
+      .then((res) => {
         setOthers(res.data);
         console.log(res.data);
-      })
+      });
   }, []);
 
-
-
-
   useEffect(() => {
-    axios.get(`http://localhost:7070/api/showroom/${id}`)
-      .then(res => {
+    axios
+      .get(`http://localhost:8080/api/showroom/${id}`)
+      .then((res) => {
         setShowroom(res.data);
         console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
   }, []);
 
   const [selectedCity, setSelectedCity] = useState(null);
@@ -99,7 +101,10 @@ const Showroom = () => {
       <Navbar />
       <div className={styles.bg}>
         <div>
-          <h1>Make Your Home <br />Modern Design.</h1>
+          <h1>
+            Make Your Home <br />
+            Modern Design.
+          </h1>
         </div>
       </div>
       <div className={styles.showroom_details}>
@@ -109,40 +114,55 @@ const Showroom = () => {
             <div>
               {/* <p><i className="bx bxs-map"></i>{showroom.address}</p> */}
             </div>
-
           </div>
 
           <div className={styles.row}>
             <div>
-              <p><i className="bx bx-mobile"></i> {showroom.contactNumber}</p>
+              <p>
+                <i className="bx bx-mobile"></i> {showroom.contactNumber}
+              </p>
             </div>
           </div>
 
           <div className={styles.row}>
             <div>
-              <p><i className='bx bxl-gmail' ></i> {showroom.email}</p>
+              <p>
+                <i className="bx bxl-gmail"></i> {showroom.email}
+              </p>
             </div>
           </div>
 
           <div className={styles.row}>
             <div>
-              <p><i className='bx bx-time-five' ></i>{showroom.openingTime}</p>
+              <p>
+                <i className="bx bx-time-five"></i>
+                {showroom.openingTime}
+              </p>
             </div>
           </div>
-
-
         </div>
         <div className={styles.gallery}>
           <div className={styles.gallery_img_1}>
-            <img src={showroom.image1} alt="" style={{ width: "500px", height: '280px' }} />
+            <img
+              src={showroom.image1}
+              alt=""
+              style={{ width: "500px", height: "280px" }}
+            />
           </div>
           <div>
-            <img src={showroom.image2} alt="" style={{ width: "500px", height: '280px' }} />
+            <img
+              src={showroom.image2}
+              alt=""
+              style={{ width: "500px", height: "280px" }}
+            />
           </div>
           <div>
-            <img src={showroom.image3} alt="" style={{ width: "500px", height: '280px' }} />
+            <img
+              src={showroom.image3}
+              alt=""
+              style={{ width: "500px", height: "280px" }}
+            />
           </div>
-
         </div>
         <div className={styles.small_details}>
           <div className={styles.info}>
@@ -158,21 +178,16 @@ const Showroom = () => {
           </div>
         </div>
         <hr className={styles.line} />
-
       </div>
-
-
 
       <div className={styles.content__area__section}>
         <div className={styles.top__filter__row}>
           <div className={styles.service__name}>Chairs</div>
-          <div className={styles.filter__btn}>
-          </div>
+          <div className={styles.filter__btn}></div>
         </div>
         <div className={styles.all__datacards}>
           <div className={styles.row__datacards}>
             <div className="">
-
               <Swiper
                 // install Swiper modules
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -181,13 +196,17 @@ const Showroom = () => {
                 navigation
                 pagination={{ clickable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log('slide change')}
+                onSlideChange={() => console.log("slide change")}
               >
                 {chairs.map((item) => (
                   <SwiperSlide key={item._id}>
                     <div className="">
                       <Link to="">
-                        <img src={item.images} alt="card" style={{ width: '250px', height: '250px' }} />
+                        <img
+                          src={item.images}
+                          alt="card"
+                          style={{ width: "250px", height: "250px" }}
+                        />
                       </Link>
                       <div className={styles.smallinfo__show}>
                         <Link to="" className={styles.link}>
@@ -199,24 +218,22 @@ const Showroom = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-
             </div>
           </div>
           <div className={styles.row__datacards}>
-            <div className={styles.grid}>
-
-            </div>
+            <div className={styles.grid}></div>
           </div>
         </div>
       </div>
 
-      <br /><hr></hr><br />
+      <br />
+      <hr></hr>
+      <br />
       <div className={styles.content__area__section}>
         <div className={styles.top__filter__row}>
-          <div className={styles.service__name} >Beds</div><br />
-          <div className={styles.filter__btn}>
-
-          </div>
+          <div className={styles.service__name}>Beds</div>
+          <br />
+          <div className={styles.filter__btn}></div>
         </div>
         <div className={styles.all__datacards}>
           <div className={styles.row__datacards}>
@@ -229,13 +246,17 @@ const Showroom = () => {
                 navigation
                 pagination={{ clickable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log('slide change')}
+                onSlideChange={() => console.log("slide change")}
               >
                 {beds.map((item) => (
                   <SwiperSlide key={item._id}>
-                    <div className=''>
+                    <div className="">
                       <Link to="">
-                        <img src={item.images} alt="card" style={{ width: '250px', height: '250px' }} />
+                        <img
+                          src={item.images}
+                          alt="card"
+                          style={{ width: "250px", height: "250px" }}
+                        />
                       </Link>
                       <div className={styles.smallinfo__show}>
                         <Link to="" className={styles.link}>
@@ -252,14 +273,13 @@ const Showroom = () => {
         </div>
       </div>
 
-
-      <br /><hr></hr><br />
+      <br />
+      <hr></hr>
+      <br />
       <div className={styles.content__area__section}>
         <div className={styles.top__filter__row}>
           <div className={styles.service__name}>Table</div>
-          <div className={styles.filter__btn}>
-
-          </div>
+          <div className={styles.filter__btn}></div>
         </div>
         <div className={styles.all__datacards}>
           <div className={styles.row__datacards}>
@@ -272,13 +292,17 @@ const Showroom = () => {
                 navigation
                 pagination={{ clickable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log('slide change')}
+                onSlideChange={() => console.log("slide change")}
               >
                 {tables.map((item) => (
                   <SwiperSlide key={item._id}>
                     <div className={styles.col - 3}>
                       <Link to="">
-                        <img src={item.images} alt="card" style={{ width: '250px', height: '250px' }} />
+                        <img
+                          src={item.images}
+                          alt="card"
+                          style={{ width: "250px", height: "250px" }}
+                        />
                       </Link>
                       <div className={styles.smallinfo__show}>
                         <Link to="" className={styles.link}>
@@ -290,25 +314,21 @@ const Showroom = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-
             </div>
           </div>
           <div className={styles.row__datacards}>
-            <div className={styles.grid}>
-
-            </div>
+            <div className={styles.grid}></div>
           </div>
         </div>
       </div>
 
-
-      <br /><hr></hr><br />
+      <br />
+      <hr></hr>
+      <br />
       <div className={styles.content__area__section}>
         <div className={styles.top__filter__row}>
           <div className={styles.service__name}>Sofa</div>
-          <div className={styles.filter__btn}>
-
-          </div>
+          <div className={styles.filter__btn}></div>
         </div>
         <div className={styles.all__datacards}>
           <div className={styles.row__datacards}>
@@ -321,13 +341,17 @@ const Showroom = () => {
                 navigation
                 pagination={{ clickable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log('slide change')}
+                onSlideChange={() => console.log("slide change")}
               >
                 {sofas.map((item) => (
                   <SwiperSlide key={item._id}>
                     <div className={styles.col - 3}>
                       <Link to="">
-                        <img src={item.images} alt="card" style={{ width: '250px', height: '250px' }} />
+                        <img
+                          src={item.images}
+                          alt="card"
+                          style={{ width: "250px", height: "250px" }}
+                        />
                       </Link>
                       <div className={styles.smallinfo__show}>
                         <Link to="" className={styles.link}>
@@ -342,21 +366,18 @@ const Showroom = () => {
             </div>
           </div>
           <div className={styles.row__datacards}>
-            <div className={styles.grid}>
-
-            </div>
+            <div className={styles.grid}></div>
           </div>
         </div>
       </div>
 
-
-      <br /><hr></hr><br />
+      <br />
+      <hr></hr>
+      <br />
       <div className={styles.content__area__section}>
         <div className={styles.top__filter__row}>
           <div className={styles.service__name}>Others</div>
-          <div className={styles.filter__btn}>
-
-          </div>
+          <div className={styles.filter__btn}></div>
         </div>
         <div className={styles.all__datacards}>
           <div className={styles.row__datacards}>
@@ -369,13 +390,17 @@ const Showroom = () => {
                 navigation
                 pagination={{ clickable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log('slide change')}
+                onSlideChange={() => console.log("slide change")}
               >
                 {others.map((item) => (
                   <SwiperSlide key={item._id}>
                     <div className={styles.col - 3}>
                       <Link to="">
-                        <img src={item.images} alt="card" style={{ width: '250px', height: '250px' }} />
+                        <img
+                          src={item.images}
+                          alt="card"
+                          style={{ width: "250px", height: "250px" }}
+                        />
                       </Link>
                       <div className={styles.smallinfo__show}>
                         <Link to="" className={styles.link}>
@@ -387,20 +412,17 @@ const Showroom = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-
             </div>
           </div>
           <div className={styles.row__datacards}>
-            <div className={styles.grid}>
-
-            </div>
+            <div className={styles.grid}></div>
           </div>
         </div>
       </div>
 
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Showroom
+export default Showroom;

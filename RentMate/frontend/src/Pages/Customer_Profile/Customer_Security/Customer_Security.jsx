@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Swal from "sweetalert2";
-        
 
 const Customer_Security = () => {
   const [isPasswordFormVisible, setNameFormVisible] = useState(false);
@@ -18,10 +17,10 @@ const Customer_Security = () => {
     setNameFormVisible(!isPasswordFormVisible);
   };
 
-const  handlepassword = (event) => {
+  const handlepassword = (event) => {
     setPassword({
       ...passwordcontainer,
-      password: event.target.value
+      password: event.target.value,
     });
   };
 
@@ -30,116 +29,109 @@ const  handlepassword = (event) => {
     if (password.length < 8) {
       return false;
     }
-  
+
     // Contains at least one lowercase letter
     if (!/[a-z]/.test(password)) {
       return false;
     }
-  
+
     // Contains at least one uppercase letter
     if (!/[A-Z]/.test(password)) {
       return false;
     }
-  
+
     // Contains at least one digit
     if (!/\d/.test(password)) {
       return false;
     }
-  
+
     // Contains at least one special character
     if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
       return false;
     }
-  
+
     // All conditions passed, the password is valid
     return true;
   }
 
   // handle form submit
-const handleSubmit = (event) => {
-  event.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  const userid = localStorage.getItem("id");
+    const userid = localStorage.getItem("id");
 
-  axios.put(`http://localhost:7070/api/customer/updatepassword/${userid}`, {
-    password: passwordcontainer.password,
-  })
-  .then((res) => {
-    console.log(res.data);
-    Swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: 'Updated Successfully!'
-    }).then(function() {
-      // Redirect the user to the login page
-      window.location = "http://localhost:3000/login";
-  });
-  })
-  .catch((err) => {
-    console.log(err);
-    Swal.fire(
-      'Error',
-      'Check your inserted Details',
-      'error'
-    );
-  });
+    axios
+      .put(`http://localhost:8080/api/customer/updatepassword/${userid}`, {
+        password: passwordcontainer.password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Updated Successfully!",
+        }).then(function () {
+          // Redirect the user to the login page
+          window.location = "http://localhost:3000/login";
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire("Error", "Check your inserted Details", "error");
+      });
 
-  handlePasswordFormVisibility();
-};
-  
+    handlePasswordFormVisibility();
+  };
+
   function checkPasswordsMatch() {
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-  
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
     if (newPassword === confirmPassword) {
-      
       const isValid = validatePassword(newPassword);
-        if (isValid) {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-          })
-          
-          Toast.fire({
-            icon: 'success',
-            title: 'Password is valid!'
-          })
-          // console.log("Password is valid!");
-          // document.getElementById('submitButton').disabled = false;
-        } else {
-          console.log("Password is invalid!");
-        }
+      if (isValid) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "Password is valid!",
+        });
+        // console.log("Password is valid!");
+        // document.getElementById('submitButton').disabled = false;
+      } else {
+        console.log("Password is invalid!");
+      }
     } else {
       const Toast = Swal.mixin({
         toast: true,
-        position: 'top-end',
+        position: "top-end",
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      })
-      
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
       Toast.fire({
-        icon: 'error',
-        title: 'Passwords do not match!'
-      })
+        icon: "error",
+        title: "Passwords do not match!",
+      });
       // console.log('Passwords do not match!');
       // document.getElementById('submitButton').disabled = true;
     }
   }
-  
-  
-
 
   return (
     <div>
@@ -183,17 +175,34 @@ const handleSubmit = (event) => {
                         <form onSubmit={handleSubmit}>
                           <div className={styles.content2}>
                             <label htmlFor="new password">New Password</label>
-                              <div className={styles.inputBox}>
-                                <input type="password" id="newPassword" placeholder=" New Password" onKeyUp={checkPasswordsMatch} onChange={handlepassword} required/>
-                              </div>
+                            <div className={styles.inputBox}>
+                              <input
+                                type="password"
+                                id="newPassword"
+                                placeholder=" New Password"
+                                onKeyUp={checkPasswordsMatch}
+                                onChange={handlepassword}
+                                required
+                              />
+                            </div>
                           </div>
                           <div className={styles.content2}>
-                            <label htmlFor="new password">Confirmation Password</label>
-                              <div className={styles.inputBox}>
-                                <input type="password" id="confirmPassword" placeholder=" Confirmation Password" onKeyUp={checkPasswordsMatch} required/>
-                              </div>
+                            <label htmlFor="new password">
+                              Confirmation Password
+                            </label>
+                            <div className={styles.inputBox}>
+                              <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder=" Confirmation Password"
+                                onKeyUp={checkPasswordsMatch}
+                                required
+                              />
+                            </div>
                           </div>
-                          <button type="submit" id="submitButton">Update</button>
+                          <button type="submit" id="submitButton">
+                            Update
+                          </button>
                         </form>
                       </div>
                       <div className={styles.closeBtn}>
@@ -221,9 +230,7 @@ const handleSubmit = (event) => {
                         </div>
                       </div>
                       <div className={styles._46}>
-                        <button>
-                          Disconnect
-                        </button>
+                        <button>Disconnect</button>
                       </div>
                     </div>
                   </section>

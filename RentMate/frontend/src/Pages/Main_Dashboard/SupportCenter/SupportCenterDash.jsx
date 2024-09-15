@@ -1,22 +1,20 @@
-import React, { useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../../../components/com.mainDashboard/sidebar/Sidebar";
 import styles from "../../../components/com.style/contentArea.module.css";
-import styless from "./supportCenterDash.module.css"
+import styless from "./supportCenterDash.module.css";
 import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 import { BreadCrumb } from "primereact/breadcrumb";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import SupportReport from "../../../components/com.mainDashboard/SupportReport/SupportReport";
 
 const SupportCenterDash = () => {
-  const items = [
-    { label: "Support Center", url: "/siteowner/support-center" }
-  ];
+  const items = [{ label: "Support Center", url: "/siteowner/support-center" }];
   const home = { icon: "pi pi-th-large", url: "/siteowner" };
   // start coding
   const toast = useRef(null);
@@ -27,23 +25,25 @@ const SupportCenterDash = () => {
   // };
 
   const accept = () => {
-    toast.current.show({ severity: 'success', summary: 'Confirmed', detail: 'You have successfully deleted', life: 3000 });
-  }
+    toast.current.show({
+      severity: "success",
+      summary: "Confirmed",
+      detail: "You have successfully deleted",
+      life: 3000,
+    });
+  };
 
   // const reject = () => {
   //     toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
   // }
 
-
-
   const confirm = () => {
     confirmDialog({
-      message: 'Do you want to delete this record?',
-      header: 'Delete Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptClassName: 'p-button-danger',
+      message: "Do you want to delete this record?",
+      header: "Delete Confirmation",
+      icon: "pi pi-info-circle",
+      acceptClassName: "p-button-danger",
       accept,
-
     });
   };
 
@@ -79,7 +79,7 @@ const SupportCenterDash = () => {
   useEffect(() => {
     function getProblems() {
       axios
-        .get("http://localhost:7070/api/problems/")
+        .get("http://localhost:8080/api/problems/")
         .then((res) => {
           setProblems(res.data);
           console.log(res.data);
@@ -98,43 +98,35 @@ const SupportCenterDash = () => {
     return searchTerms.every((term) => dataInfo.includes(term));
   });
 
-
   const deleteProblems = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .delete(`http://localhost:7070/api/problems/${id}`)
-      .then((res) => {
-
-        console.log(res);
-        console.log(res.data);
-       // window.location.reload();
-      });
-      Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+        axios.delete(`http://localhost:8080/api/problems/${id}`).then((res) => {
+          console.log(res);
+          console.log(res.data);
+          // window.location.reload();
+        });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
+        );
+      }
+    });
   };
-
 
   // end coding
   return (
-
     <div>
       <Toast ref={toast} />
       <ConfirmDialog />
@@ -152,8 +144,6 @@ const SupportCenterDash = () => {
         <hr className={styles.line} />
         <div className={styles.contentArea}>
           <div className={styles.contentbody}>
-
-
             {/* start coding */}
 
             <div className={styless.top__content}>
@@ -211,7 +201,9 @@ const SupportCenterDash = () => {
                     <td>{data.problem}</td>
                     <td>{pickStatus(data.status)}</td>
                     <td>
-                      <Link to={`/siteowner/support-center/replyInquary/${data._id}`}>
+                      <Link
+                        to={`/siteowner/support-center/replyInquary/${data._id}`}
+                      >
                         <Button label="Reply" severity="success" raised />
                       </Link>
                       <Button

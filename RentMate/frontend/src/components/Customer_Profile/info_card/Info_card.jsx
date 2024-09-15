@@ -28,7 +28,7 @@ const Info_Card = () => {
 
   useEffect(() => {
     function getcustomerinforeal() {
-      axios(`http://localhost:7070/api/customer/customer_info/${userid}`)
+      axios(`http://localhost:8080/api/customer/customer_info/${userid}`)
         .then((res) => {
           setCustomerinfo2(res.data);
           const temppic = res.data.avatar;
@@ -53,7 +53,7 @@ const Info_Card = () => {
     const userid = localStorage.getItem("id");
 
     function getcustomerinfo() {
-      axios(`http://localhost:7070/api/customer/customer_basic_info/${userid}`)
+      axios(`http://localhost:8080/api/customer/customer_basic_info/${userid}`)
         .then((res) => {
           setCustomerinfo(res.data);
           console.log(res.data);

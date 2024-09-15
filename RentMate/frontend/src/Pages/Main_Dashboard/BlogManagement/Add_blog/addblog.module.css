@@ -9,7 +9,7 @@
 .text {
   font-size: 30px;
   font-weight: 500;
-  color: #707070;
+  color: #808070;
 }
 
 .contentArea {
@@ -39,30 +39,26 @@
 .welcomemsg {
   font-size: 18px;
   font-weight: 500;
-  color: #707070;
-  background: #EFEFEF;
+  color: #808070;
+  background: #efefef;
   margin-top: 20px;
   width: fit-content;
   padding: 11px;
   border-radius: 6px;
 }
 
-.contentbody{
+.contentbody {
   padding-top: 22px;
 }
 
-
-.furnitureButton{
+.furnitureButton {
   background-color: rgb(47, 109, 224);
-  
-  font-size: 20px;
-  
-}
 
+  font-size: 20px;
+}
 
 /* CSS styles for the date input */
 label[for="date"] {
-  
   margin-bottom: 10px;
 }
 
@@ -76,7 +72,7 @@ input[type="date"] {
 /* Optional: You can customize the appearance of the date picker dropdown */
 input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: transparent;
- 
+
   background-size: 16px;
   background-repeat: no-repeat;
   background-position: center;
@@ -90,7 +86,6 @@ input[type="date"]:focus {
   border-color: #5c7cfa;
   box-shadow: 0 0 3px #5c7cfa;
 }
-
 
 textarea {
   border: 1px solid #000000;
@@ -108,12 +103,11 @@ textarea:focus {
   border-color: #000000;
 }
 
-
 input[type="text"] {
   border: 10px solid #ccc;
   background-color: #fff;
   color: rgb(20, 19, 19);
-  
+
   padding: 18px 16px;
   border-radius: 4px;
   font-size: 16px;
@@ -124,7 +118,6 @@ input[type="text"]:hover,
 input[type="text"]:focus {
   border-color: #000000;
 }
-
 
 select {
   border: 1px solid #ccc;

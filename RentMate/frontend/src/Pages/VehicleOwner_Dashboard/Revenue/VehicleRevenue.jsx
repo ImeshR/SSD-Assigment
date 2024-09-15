@@ -1,22 +1,17 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../../../components/com.vehicleOwner/sidebar/Sidebar";
 import styles from "../../../components/com.style/contentArea.module.css";
 import { BreadCrumb } from "primereact/breadcrumb";
-import styless from './vehiclerevenue.module.css';
+import styless from "./vehiclerevenue.module.css";
 import ReactToPrint from "react-to-print";
 import { Button } from "primereact/button";
 import axios from "axios";
 import RevenueReport from "../../../components/com.vehicleOwner/ReportRevenue/RevenueReport";
 
-
 const VehicleRevenue = () => {
   const componentRef = useRef();
-  const items = [
-    { label: "Revenue", url: "/vehicleOwner/revenue" }
-  ];
+  const items = [{ label: "Revenue", url: "/vehicleOwner/revenue" }];
   const home = { icon: "pi pi-th-large", url: "/vehicleOwner" };
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchChange = (event) => {
@@ -28,7 +23,7 @@ const VehicleRevenue = () => {
   useEffect(() => {
     function getbooking() {
       axios
-        .get("http://localhost:7070/api/bookingVehicle/")
+        .get("http://localhost:8080/api/bookingVehicle/")
         .then((res) => {
           setbookingVehicle(res.data);
           console.log(res.data);
@@ -50,19 +45,18 @@ const VehicleRevenue = () => {
   // Delete Function Call
   const deletebooking = (id) => {
     axios
-      .delete(`http://localhost:7070/api/revenuVehicle/${id}`)
+      .delete(`http://localhost:8080/api/revenuVehicle/${id}`)
       .then((res) => {
         console.log(res.data);
         window.location.reload();
       });
   };
 
-
   return (
     <div>
       <Sidebar />
       <div ref={componentRef}>
-         <RevenueReport /> 
+        <RevenueReport />
       </div>
       <div className={styles.content}>
         <div className={styles.text}>Revenue</div>
@@ -74,8 +68,6 @@ const VehicleRevenue = () => {
         <hr className={styles.line} />
         <div className={styles.contentArea}>
           <div className={styles.contentbody}>
-
-
             <div className={styless.top__content}>
               <div className={styless.left__side}>
                 <input
@@ -87,7 +79,6 @@ const VehicleRevenue = () => {
                   onChange={handleSearchChange}
                 />
               </div>
-
 
               <div className={styless.right__side}>
                 <ReactToPrint
@@ -101,10 +92,9 @@ const VehicleRevenue = () => {
               </div>
             </div>
 
-            <div className={styless.tablearea__content} >
+            <div className={styless.tablearea__content}>
               <table>
                 <tr>
-
                   <th>VIN</th>
                   <th>Distance</th>
                   <th>Date</th>
@@ -124,7 +114,6 @@ const VehicleRevenue = () => {
         </div>
       </div>
     </div>
-
   );
 };
 

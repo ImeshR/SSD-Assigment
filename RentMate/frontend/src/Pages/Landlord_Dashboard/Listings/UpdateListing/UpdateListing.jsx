@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { BreadCrumb } from "primereact/breadcrumb";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 import Sidebar from "../../../../components/com.landlord/sidebar/Sidebar";
 import styles from "../../../../components/com.style/contentArea.module.css";
@@ -37,7 +37,7 @@ const UpdateListing = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7070/api/manageListings/${id}`
+          `http://localhost:8080/api/manageListings/${id}`
         );
         setUserDetails(response.data);
       } catch (error) {
@@ -85,15 +85,11 @@ const UpdateListing = () => {
       return;
     }
 
-    Swal.fire(
-      'Success',
-      'User Updated Successfully',
-      'success'
-    );
+    Swal.fire("Success", "User Updated Successfully", "success");
     navigate("/landlord/listings");
     try {
       await axios.put(
-        `http://localhost:7070/api/manageListings/${id}`,
+        `http://localhost:8080/api/manageListings/${id}`,
         userDetails
       );
     } catch (error) {
@@ -105,7 +101,6 @@ const UpdateListing = () => {
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
 
   return (
     <div>

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import styles from "./reportgenerate.module.css";
-import styless from '../../../Pages/VehicleOwner_Dashboard/Vehicles/Vehicles.jsx'
+import styless from "../../../Pages/VehicleOwner_Dashboard/Vehicles/Vehicles.jsx";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import axios from "axios";
@@ -20,13 +20,13 @@ const ReportGenerate = () => {
     setSearchTerm(event.target.value);
   };
 
-//   const ListingName = (text) => {
-//     return text.substring(0, 20) + " ...";
-//   };
+  //   const ListingName = (text) => {
+  //     return text.substring(0, 20) + " ...";
+  //   };
 
-//   const LocationText = (text) => {
-//     return text.substring(0, 15) + " ...";
-//   };
+  //   const LocationText = (text) => {
+  //     return text.substring(0, 15) + " ...";
+  //   };
 
   const pickStatus = (status) => {
     if (status.toLowerCase() === "active") {
@@ -54,7 +54,7 @@ const ReportGenerate = () => {
   useEffect(() => {
     function getVehicle() {
       axios
-        .get("http://localhost:7070/api/vehi/")
+        .get("http://localhost:8080/api/vehi/")
         .then((res) => {
           setVehicle(res.data);
           console.log(res.data);
@@ -75,7 +75,7 @@ const ReportGenerate = () => {
   return (
     <div>
       <div className={styles.contentbody}>
-      <div className={styles.CReportpage_header}>
+        <div className={styles.CReportpage_header}>
           <div className={styles.layer1}>
             <div className={styles.CReportpage_logo}>
               <div className={styles.CReportpage_logo_container}>
@@ -94,7 +94,16 @@ const ReportGenerate = () => {
                     <span>076-XXXXXXX</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faMobileScreen} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faMobileScreen}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -103,7 +112,16 @@ const ReportGenerate = () => {
                     <span>rentmatehelpdesk@gmail.com</span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faEarthAmericas} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faEarthAmericas}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className={styles.lay1}>
@@ -114,7 +132,16 @@ const ReportGenerate = () => {
                     </span>
                   </div>
                   <div className={styles.data_icon}>
-                    <FontAwesomeIcon icon={faLocationCrosshairs} style={{color: "#ffffff",width: "20px",height: "20px",margin: "0 auto",marginTop: "10px"}} />
+                    <FontAwesomeIcon
+                      icon={faLocationCrosshairs}
+                      style={{
+                        color: "#ffffff",
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 auto",
+                        marginTop: "10px",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -122,37 +149,37 @@ const ReportGenerate = () => {
           </div>
         </div>
         <div className={styless.tablearea__content}>
-        <table>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Image</th>
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Image</th>
+            </tr>
+            {filteredData.map((data) => (
+              <tr key={data.id}>
+                <td>{data.name}</td>
+                <td>{data.email}</td>
+                <td>{data.contact}</td>
+                <td>{data.date}</td>
+                <td>{pickStatus(data.status)}</td>
+                <td>
+                  {data.image.length > 0 && (
+                    <Image
+                      src={data.image[0]}
+                      zoomSrc={data.image[0]}
+                      alt="Image"
+                      width="70"
+                      height="50"
+                      preview
+                    />
+                  )}
+                </td>
               </tr>
-              {filteredData.map((data) => (
-                <tr key={data.id}>
-                  <td>{data.name}</td>
-                  <td>{data.email}</td>
-                  <td>{data.contact}</td>
-                  <td>{data.date}</td>
-                  <td>{pickStatus(data.status)}</td>
-                   <td>
-                    {data.image.length > 0 && (
-                      <Image
-                        src={data.image[0]}
-                        zoomSrc={data.image[0]}
-                        alt="Image"
-                        width="70"
-                        height="50"
-                        preview
-                      />
-                    )}
-                  </td> 
-                </tr>
-              ))}
-            </table>
+            ))}
+          </table>
         </div>
       </div>
     </div>

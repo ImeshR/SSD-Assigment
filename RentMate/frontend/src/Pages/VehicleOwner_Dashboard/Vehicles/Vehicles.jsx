@@ -11,10 +11,8 @@ import { Tag } from "primereact/tag";
 // import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog"; // For confirmDialog method
 import axios from "axios";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import ReportGenerate from "../../../components/com.vehicleOwner/ReportVehicle/ReportGenerate";
-
-
 
 const Vehicle = () => {
   const ref = useRef();
@@ -24,10 +22,10 @@ const Vehicle = () => {
   const componentRef = useRef();
 
   const updateFunc = (id) => {
-    navigate('update-vehicle', { state: { id } })
-  }
+    navigate("update-vehicle", { state: { id } });
+  };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // const VehicleName = (text) => {
   //   return text.substring(0, 20) + " ...";
@@ -41,14 +39,9 @@ const Vehicle = () => {
   //   return text.substring(0, 5) + " ...";
   // };
 
-
   // const date = (text) => {
   //   return text.substring(0, 5) + " ...";
   // };
-
-
-
-
 
   // const accept = () => {
   //   toast.current.show({
@@ -58,7 +51,6 @@ const Vehicle = () => {
   //     life: 3000,
   //   });
   // };
-
 
   // const confirm = () => {
   //   confirmDialog({
@@ -104,7 +96,7 @@ const Vehicle = () => {
   useEffect(() => {
     function getVehicle() {
       axios
-        .get(`http://localhost:7070/api/vehi/user/${id}`)
+        .get(`http://localhost:8080/api/vehi/user/${id}`)
         .then((res) => {
           setVehicle(res.data);
           console.log(res.data);
@@ -126,38 +118,32 @@ const Vehicle = () => {
   // Delete Function Call
   const deleteVehicle = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .delete(`http://localhost:7070/api/vehi/${id}`)
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        window.location.reload();
-      });
-      Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+        axios.delete(`http://localhost:8080/api/vehi/${id}`).then((res) => {
+          console.log(res);
+          console.log(res.data);
+          window.location.reload();
+        });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
+        );
+      }
+    });
   };
 
-
   return (
-
     <div>
       {/* <Toast ref={toast} />
     <ConfirmDialog /> */}
@@ -206,7 +192,7 @@ const Vehicle = () => {
                 </Link>
               </div>
             </div>
-            <div className={styless.tablearea__content} >
+            <div className={styless.tablearea__content}>
               <table>
                 <tr>
                   <th>Name</th>
@@ -238,9 +224,14 @@ const Vehicle = () => {
                     </td>
 
                     <td>
-
-
-                      <Button label="Edit" severity="success" raised onClick={() => { updateFunc(data._id) }} />
+                      <Button
+                        label="Edit"
+                        severity="success"
+                        raised
+                        onClick={() => {
+                          updateFunc(data._id);
+                        }}
+                      />
 
                       <Button
                         label="Delete"
@@ -260,4 +251,3 @@ const Vehicle = () => {
   );
 };
 export default Vehicle;
-

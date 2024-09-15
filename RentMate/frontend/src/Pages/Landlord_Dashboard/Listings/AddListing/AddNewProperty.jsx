@@ -4,7 +4,7 @@ import styles from "../../../../components/com.style/contentArea.module.css";
 import istyle from "./addNewProperty.module.css";
 import { BreadCrumb } from "primereact/breadcrumb";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const AddNewProperty = () => {
   const items = [
@@ -15,7 +15,6 @@ const AddNewProperty = () => {
 
   //get user id from local storage
   const userid = localStorage.getItem("id");
-  
 
   const [name, setProperty] = useState("");
   const [address, setLocation] = useState("");
@@ -48,7 +47,7 @@ const AddNewProperty = () => {
       return;
     } else {
       const newListing = {
-        userid : userid,
+        userid: userid,
         name,
         address,
         rooms,
@@ -61,15 +60,15 @@ const AddNewProperty = () => {
       };
       console.log(newListing);
       axios
-        .post("http://localhost:7070/api/manageListings/add", newListing)
+        .post("http://localhost:8080/api/manageListings/add", newListing)
         .then((response) => {
           Swal.fire(
-            'Success',
-            'Successfully Added New Listing',
-            'success'
+            "Success",
+            "Successfully Added New Listing",
+            "success"
           ).then(function () {
             window.location.href = "/landlord/listings";
-          })
+          });
         })
         .catch((err) => {
           alert(err);

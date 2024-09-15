@@ -11,7 +11,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const LandlordProfile = () => {
   const items = [{ label: "profile", url: "/landlord/profile" }];
@@ -29,36 +29,34 @@ const LandlordProfile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios.get(`http://localhost:7070/api/userr/6465ba29f3d1749086778134`)
+      await axios
+        .get(`http://localhost:8080/api/userr/6465ba29f3d1749086778134`)
         .then((response) => {
-          setFname(response.data.user.fname)
-          setLname(response.data.user.lname)
-          setContactNumber(response.data.user.contactNumber)
-          setEmail(response.data.user.email)
-          setRoll(response.data.user.roll)
-          setUsername(response.data.user.username)
-          setPassword(response.data.user.password)
+          setFname(response.data.user.fname);
+          setLname(response.data.user.lname);
+          setContactNumber(response.data.user.contactNumber);
+          setEmail(response.data.user.email);
+          setRoll(response.data.user.roll);
+          setUsername(response.data.user.username);
+          setPassword(response.data.user.password);
         })
-        .catch((err) => console.log(err))
-    }
+        .catch((err) => console.log(err));
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateFunction()
-    updateFunction()
-    Swal.fire(
-      'Success',
-      'User Updated Successfully',
-      'success'
-    ).then((result) => {
-      if (result.isConfirmed) {
-        navigate('/landlord/profile')
+    updateFunction();
+    updateFunction();
+    Swal.fire("Success", "User Updated Successfully", "success").then(
+      (result) => {
+        if (result.isConfirmed) {
+          navigate("/landlord/profile");
+        }
       }
-    }
-    )
+    );
   };
 
   const updateFunction = async () => {
@@ -70,15 +68,23 @@ const LandlordProfile = () => {
       roll: roll,
       username: username,
       password: password,
-    }
-    await axios.put(`http://localhost:7070/api/userr/6465ba29f3d1749086778134`, userDetails)
+    };
+    await axios
+      .put(
+        `http://localhost:8080/api/userr/6465ba29f3d1749086778134`,
+        userDetails
+      )
       .then((response) => console.log(response.data))
-      .catch((err) => { console.log(err); })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:7070/api/userr/6465ba29f3d1749086778134`);
+      await axios.delete(
+        `http://localhost:8080/api/userr/6465ba29f3d1749086778134`
+      );
       // Perform any additional actions after successful deletion
       navigate("/");
     } catch (error) {
@@ -86,7 +92,6 @@ const LandlordProfile = () => {
       // Handle error scenarios
     }
   };
-  
 
   return (
     <div>
@@ -109,7 +114,9 @@ const LandlordProfile = () => {
               <div className={stylesz.banner__content__area}>
                 <img src={Profile} alt="Profile" />
                 <div className={stylesz.landlord__smallinfo}>
-                  <div className={stylesz.lardlord__name}>{fname} {lname}</div>
+                  <div className={stylesz.lardlord__name}>
+                    {fname} {lname}
+                  </div>
                   <div className={stylesz.landlord__data}>
                     <div>
                       <i class="bx bxs-face"></i>
@@ -289,7 +296,9 @@ const LandlordProfile = () => {
                       </div>
                       <div class="formgrid grid">
                         <div class="field col-12">
-                          <button type="submit" className={stylesz.submit__btn}>Update Profile</button>
+                          <button type="submit" className={stylesz.submit__btn}>
+                            Update Profile
+                          </button>
                         </div>
                       </div>
                     </p>

@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect  } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "../../../../components/com.mainDashboard/sidebar/Sidebar";
 import styles from "../../../../components/com.style/contentArea.module.css";
-import styless from './pendingVehicles.module.css'
+import styless from "./pendingVehicles.module.css";
 import { BreadCrumb } from "primereact/breadcrumb";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
@@ -14,15 +14,15 @@ import { Tag } from "primereact/tag";
 const PendingVehicles = () => {
   const items = [
     { label: "Pending List", url: "" },
-    { label: "Pending Vehicles", url: "/siteowner/pending-list/pending-vehicles" },
+    {
+      label: "Pending Vehicles",
+      url: "/siteowner/pending-list/pending-vehicles",
+    },
   ];
   const home = { icon: "pi pi-th-large", url: "/siteowner" };
 
-
-  
   const componentRef = useRef();
   const toast = useRef(null);
-
 
   const confirm = () => {
     confirmDialog({
@@ -66,7 +66,7 @@ const PendingVehicles = () => {
   useEffect(() => {
     function getListings() {
       axios
-        .get("http://localhost:7070/api/vehi/")
+        .get("http://localhost:8080/api/vehi/")
         .then((res) => {
           setListings(res.data);
           console.log(res.data);
@@ -88,87 +88,74 @@ const PendingVehicles = () => {
   // Delete Function Call
   const deletevehicle = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-        .delete(`http://localhost:7070/api/vehi/${id}`)
-        .then((res) => {
+        axios.delete(`http://localhost:8080/api/vehi/${id}`).then((res) => {
           // handle success
           console.log("Listing deleted successfully!");
           // update the listings state by removing the deleted listing
           setListings(listings.filter((listing) => listing.id !== id));
         });
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        ).then((result) => {
-          if (result.isConfirmed) {
-            window.location.reload(false);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
           }
-        })
+        );
       }
-    })
-     
+    });
   };
-
-
-  
-
-
 
   const accept = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you want to  give Approvel!",
-      icon: 'success',
+      icon: "success",
       showCancelButton: true,
-      confirmButtonColor: '#4caf50',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Accept it!'
+      confirmButtonColor: "#4caf50",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Accept it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .put(`http://localhost:7070/api/vehi/${id}`, { status: "Active" })
-      .then((res) => {
-        // handle success
-        console.log("Listing status changed to active!");
-        // update the listings state to reflect the changed status
-        const updatedListings = listings.map((listing) =>
-          listing.id === id ? { ...listing, status: "Active" } : listing
+        axios
+          .put(`http://localhost:8080/api/vehi/${id}`, { status: "Active" })
+          .then((res) => {
+            // handle success
+            console.log("Listing status changed to active!");
+            // update the listings state to reflect the changed status
+            const updatedListings = listings.map((listing) =>
+              listing.id === id ? { ...listing, status: "Active" } : listing
+            );
+            setListings(updatedListings);
+            // toast.current.show({
+            //   severity: "success",
+            //   summary: "Confirmed",
+            //   detail: "Listing status changed to active!",
+            //   life: 3000,
+            // });
+          });
+        Swal.fire("Accepted!", "Your file has been accepted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
         );
-        setListings(updatedListings);
-        // toast.current.show({
-        //   severity: "success",
-        //   summary: "Confirmed",
-        //   detail: "Listing status changed to active!",
-        //   life: 3000,
-        // });
-      })
-      Swal.fire(
-        'Accepted!',
-        'Your file has been accepted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+      }
+    });
   };
-  
 
   return (
     <div>
-       <Toast ref={toast} />
+      <Toast ref={toast} />
       <ConfirmDialog />
       <Sidebar />
       <div className={styles.content}>
@@ -181,24 +168,26 @@ const PendingVehicles = () => {
         <hr className={styles.line} />
         <div className={styles.contentArea}>
           <div className={styles.contentbody}>
-          <div className={styless.flex_container}>
-            <div className={styless.R1}>
-            <a href="/siteowner/pending-list/pending-properties" className={styless.shadoww}>
-            <button className={styless.gradientt}>Properties </button>
-            </a>
+            <div className={styless.flex_container}>
+              <div className={styless.R1}>
+                <a
+                  href="/siteowner/pending-list/pending-properties"
+                  className={styless.shadoww}
+                >
+                  <button className={styless.gradientt}>Properties </button>
+                </a>
+              </div>
+              <div className={styless.R1}>
+                <a
+                  href="/siteowner/pending-list/pending-vehicles"
+                  className={styless.shadoww}
+                >
+                  <button className={styless.gradientt}> Vehicles </button>
+                </a>
+              </div>
             </div>
-            <div className={styless.R1}>
-            <a href="/siteowner/pending-list/pending-vehicles" className={styless.shadoww}>
-            <button className={styless.gradientt}> Vehicles </button>
-            </a>
-             </div>
-           
-          </div>
 
-
-
-
-          <div className={styless.content}>
+            <div className={styless.content}>
               <div className={styless.left_side}>
                 <input
                   type="search"
@@ -209,48 +198,49 @@ const PendingVehicles = () => {
                   onChange={handleSearchChange}
                 />
               </div>
-              
             </div>
 
             <div className={styless.tablearea__content} ref={componentRef}>
               <table>
                 <tr>
-                  <th>Name</th>                  
+                  <th>Name</th>
                   <th>Email</th>
                   <th>Contact</th>
-                  <th>Date</th>                  
+                  <th>Date</th>
                   <th>Status</th>
                   <th>Operation</th>
                 </tr>
                 {filteredData.map((data) => (
                   <tr key={data.id}>
-                    <td>{data.name}</td>                  
+                    <td>{data.name}</td>
                     <td>{data.email}</td>
                     <td>{data.contact}</td>
-                    <td>{data.date}</td>                    
+                    <td>{data.date}</td>
                     {/* <td>{data.status}</td> */}
-                     <td>{pickStatus(data.status)}</td> 
+                    <td>{pickStatus(data.status)}</td>
                     <td>
-                      
-                        <Button label="Accept" severity="success" raised onClick={()=>{accept(data._id)}} />
-                      
+                      <Button
+                        label="Accept"
+                        severity="success"
+                        raised
+                        onClick={() => {
+                          accept(data._id);
+                        }}
+                      />
+
                       <Button
                         label="Delete"
                         severity="danger"
                         raised
-                        onClick={()=>{deletevehicle(data._id)}}
+                        onClick={() => {
+                          deletevehicle(data._id);
+                        }}
                       />
                     </td>
                   </tr>
                 ))}
               </table>
             </div>
-
-
-
-
-
-            
           </div>
         </div>
       </div>

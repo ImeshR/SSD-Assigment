@@ -17,7 +17,7 @@ const Properties = () => {
     "https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/ee94e6c1-6ebc-496e-af84-1502edd1b759.jpeg",
     "https://a0.muscache.com/im/pictures/miso/Hosting-566028065891205462/original/8272f279-b785-4533-b9e5-b400a37d6a52.jpeg",
     "https://a0.muscache.com/im/pictures/miso/Hosting-13016398/original/6c59e24d-89f3-4475-aaca-80363792fb51.jpeg",
-    "https://a0.muscache.com/im/pictures/miso/Hosting-558544930816984660/original/09e08435-2c66-4d22-ac73-94f5fd487126.jpeg"
+    "https://a0.muscache.com/im/pictures/miso/Hosting-558544930816984660/original/09e08435-2c66-4d22-ac73-94f5fd487126.jpeg",
   ];
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Properties = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:7070/api/manageListings/"
+          "http://localhost:8080/api/manageListings/"
         );
         const data = await response.json();
         setPropertyData(data);

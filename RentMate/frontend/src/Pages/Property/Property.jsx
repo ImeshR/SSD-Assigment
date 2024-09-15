@@ -28,7 +28,7 @@ const Property = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:7070/api/manageListings/${id}`
+          `http://localhost:8080/api/manageListings/${id}`
         );
         setPropertyDetails(response.data);
       } catch (error) {
@@ -103,19 +103,34 @@ const Property = () => {
         </div>
         <div className={styles.gallery}>
           <div className={styles.gallery_img_1}>
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/ee94e6c1-6ebc-496e-af84-1502edd1b759.jpeg?im_w=1200" alt="" />
+            <img
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/ee94e6c1-6ebc-496e-af84-1502edd1b759.jpeg?im_w=1200"
+              alt=""
+            />
           </div>
           <div>
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/d037ba05-1237-4b00-9092-8fa71bada83e.jpeg?im_w=720" alt="" />
+            <img
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/d037ba05-1237-4b00-9092-8fa71bada83e.jpeg?im_w=720"
+              alt=""
+            />
           </div>
           <div>
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/88cec5b3-01ab-4d26-8597-bd3b1fc36e01.jpeg?im_w=720" alt="" />
+            <img
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/88cec5b3-01ab-4d26-8597-bd3b1fc36e01.jpeg?im_w=720"
+              alt=""
+            />
           </div>
           <div>
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/061a1f0a-27f0-4bf6-acee-05e978030487.jpeg?im_w=720" alt="" />
+            <img
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/061a1f0a-27f0-4bf6-acee-05e978030487.jpeg?im_w=720"
+              alt=""
+            />
           </div>
           <div>
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/35989289-d57f-449a-b23b-0c285e715ee1.jpeg?im_w=720" alt="" />
+            <img
+              src="https://a0.muscache.com/im/pictures/miso/Hosting-26300485/original/35989289-d57f-449a-b23b-0c285e715ee1.jpeg?im_w=720"
+              alt=""
+            />
           </div>
         </div>
         <div className={styles.small_details}>

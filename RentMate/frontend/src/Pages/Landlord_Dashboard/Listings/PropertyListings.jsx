@@ -10,7 +10,7 @@ import { Tag } from "primereact/tag";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ListingReport from "../../../components/com.landlord/Reports/ListingReport";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const PropertyListings = () => {
   const ref = useRef();
@@ -60,7 +60,7 @@ const PropertyListings = () => {
   useEffect(() => {
     function getListings() {
       axios
-        .get("http://localhost:7070/api/manageListings/")
+        .get("http://localhost:8080/api/manageListings/")
         .then((res) => {
           setListings(res.data);
           console.log(res.data);
@@ -86,32 +86,30 @@ const PropertyListings = () => {
   //Delete Listing
   const deleteListing = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:7070/api/manageListings/${id}`)
+          .delete(`http://localhost:8080/api/manageListings/${id}`)
           .then((res) => {
             console.log(res);
             console.log(res.data);
           });
-        Swal.fire(
-          'Deleted!',
-          'Your listing has been deleted.',
-          'success'
-        ).then((result) => {
-          if (result.isConfirmed) {
-            window.location.reload(false);
+        Swal.fire("Deleted!", "Your listing has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
           }
-        })
+        );
       }
-    })
+    });
   };
 
   return (

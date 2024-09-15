@@ -12,30 +12,36 @@ const LandlordDash = () => {
   const items = [{ label: "dashboard", url: "/landlord" }];
   const home = { icon: "pi pi-th-large", url: "/landlord" };
 
-  const [users , setUsers] = useState([])
-  const [Customer, setCustomer] = useState([])
+  const [users, setUsers] = useState([]);
+  const [Customer, setCustomer] = useState([]);
 
-  useEffect(()=>{
-    const fetchData = async() => {
-      await axios.get("http://localhost:7070/api/manageListings/")
-      .then((response) => setUsers(response.data))
-      .catch((err) => {console.log(err)})
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .get("http://localhost:8080/api/manageListings/")
+        .then((response) => setUsers(response.data))
+        .catch((err) => {
+          console.log(err);
+        });
       console.log(users);
-    }
+    };
 
-    fetchData()
-  })
+    fetchData();
+  });
 
-  useEffect(()=>{
-    const fetchData = async() => {
-      await axios.get("http://localhost:7070/reservation/")
-      .then((response) => setCustomer(response.data))
-      .catch((err) => {console.log(err)})
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .get("http://localhost:8080/reservation/")
+        .then((response) => setCustomer(response.data))
+        .catch((err) => {
+          console.log(err);
+        });
       console.log(Customer);
-    }
+    };
 
-    fetchData()
-  })
+    fetchData();
+  });
 
   return (
     <div>

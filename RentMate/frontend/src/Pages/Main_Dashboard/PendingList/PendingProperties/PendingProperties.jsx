@@ -69,7 +69,7 @@ const PendingProperties = () => {
   useEffect(() => {
     function getListings() {
       axios
-        .get("http://localhost:7070/api/manageListings/")
+        .get("http://localhost:8080/api/manageListings/")
         .then((res) => {
           setListings(res.data);
           console.log(res.data);
@@ -91,71 +91,67 @@ const PendingProperties = () => {
   // Delete Function Call
   const deleteListing = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .delete(`http://localhost:7070/api/manageListings/${id}`)
-      .then((res) => {
-        // handle success
-        console.log("Listing deleted successfully!");
-        // update the listings state by removing the deleted listing
-        setListings(listings.filter((listing) => listing.id !== id));
-      })
-      Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+        axios
+          .delete(`http://localhost:8080/api/manageListings/${id}`)
+          .then((res) => {
+            // handle success
+            console.log("Listing deleted successfully!");
+            // update the listings state by removing the deleted listing
+            setListings(listings.filter((listing) => listing.id !== id));
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
+        );
+      }
+    });
   };
-
 
   const accept = (id) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you want to  give Approvel!",
-      icon: 'success',
+      icon: "success",
       showCancelButton: true,
-      confirmButtonColor: '#4caf50',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Accept it!'
+      confirmButtonColor: "#4caf50",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Accept it!",
     }).then((result) => {
       if (result.isConfirmed) {
-    axios
-      .put(`http://localhost:7070/api/manageListings/${id}`, { status: "Active" })
-      .then((res) => {
-        // handle success
-        console.log("Listing status changed to active!");
-        // update the listings state to reflect the changed status
-        const updatedListings = listings.map((listing) =>
-          listing.id === id ? { ...listing, status: "Active" } : listing
+        axios
+          .put(`http://localhost:8080/api/manageListings/${id}`, {
+            status: "Active",
+          })
+          .then((res) => {
+            // handle success
+            console.log("Listing status changed to active!");
+            // update the listings state to reflect the changed status
+            const updatedListings = listings.map((listing) =>
+              listing.id === id ? { ...listing, status: "Active" } : listing
+            );
+            setListings(updatedListings);
+          });
+        Swal.fire("Accepted!", "Your file has been accepted.", "success").then(
+          (result) => {
+            if (result.isConfirmed) {
+              window.location.reload(false);
+            }
+          }
         );
-        setListings(updatedListings);
-        
-      })
-      Swal.fire(
-        'Accepted!',
-        'Your file has been accepted.',
-        'success'
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload(false);
-        }
-      })
-    }
-  })
+      }
+    });
   };
 
   return (
@@ -190,7 +186,6 @@ const PendingProperties = () => {
                   <button className={styless.gradientt}> Vehicles </button>
                 </a>
               </div>
-            
             </div>
 
             <div className={styless.content}>
@@ -204,14 +199,13 @@ const PendingProperties = () => {
                   onChange={handleSearchChange}
                 />
               </div>
-              
             </div>
 
             <div className={styless.tablearea__content} ref={componentRef}>
               <table>
                 <tr>
                   <th>Name</th>
-                
+
                   <th>Location</th>
                   <th>Bedrooms</th>
                   <th>Beds</th>
@@ -222,29 +216,36 @@ const PendingProperties = () => {
                 {filteredData.map((data) => (
                   <tr key={data.id}>
                     <td>{data.name}</td>
-                    
+
                     <td>{data.address}</td>
                     <td>{data.rooms}</td>
                     <td>{data.beds}</td>
                     <td>{data.baths}</td>
                     <td>{pickStatus(data.status)}</td>
-                    
+
                     <td>
-                      
-                    <Button label="Accept" severity="success" raised onClick={()=>{accept(data._id)}} />
-                      
+                      <Button
+                        label="Accept"
+                        severity="success"
+                        raised
+                        onClick={() => {
+                          accept(data._id);
+                        }}
+                      />
+
                       <Button
                         label="Delete"
                         severity="danger"
                         raised
-                        onClick={()=>{deleteListing(data._id)}}
+                        onClick={() => {
+                          deleteListing(data._id);
+                        }}
                       />
                     </td>
                   </tr>
                 ))}
               </table>
             </div>
-
           </div>
         </div>
       </div>
