@@ -29,8 +29,9 @@ const UserProvider = ({ children }) => {
 
         const decodedToken = jwtDecode(access_token);
         setUser({
+          id: decodedToken.id,
           email: decodedToken.email,
-          role: decodedToken.role,
+          name: decodedToken.name,
         });
       } catch (error) {
         console.error("Token refresh failed:", error);
@@ -62,8 +63,9 @@ const UserProvider = ({ children }) => {
 
       const decodedToken = jwtDecode(access_token);
       setUser({
+        id: decodedToken.id,
         email: decodedToken.email,
-        role: decodedToken.role,
+        name: decodedToken.name,
       });
 
       return decodedToken.role;
