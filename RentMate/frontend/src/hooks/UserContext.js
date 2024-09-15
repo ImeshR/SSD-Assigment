@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
+// UserContext.js
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
@@ -11,63 +12,55 @@ const UserProvider = ({ children }) => {
   );
   const [refreshToken, setRefreshToken] = useState(
     localStorage.getItem("refreshToken")
-    );
+  );
+  const [isLoading, setIsLoading] = useState(true);
+
+  const refreshAccessToken = useCallback(async () => {
+    if (refreshToken) {
+      try {
+        const response = await axios.post(
+          "http://localhost:7070/api/auth/refresh",
+          { refresh_token: refreshToken }
+        );
+
+        const { access_token } = response.data;
+        setAccessToken(access_token);
+        localStorage.setItem("accessToken", access_token);
+
+        const decodedToken = jwtDecode(access_token);
+        setUser({
+          email: decodedToken.email,
+          role: decodedToken.role,
+        });
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+        logout();
+      }
+    }
+    setIsLoading(false);
+  }, [refreshToken]);
 
   useEffect(() => {
-    const refreshAccessToken = async () => {
-      if (accessToken && refreshToken) {
-        try {
-          const response = await axios.post(
-            "http://localhost:7070/api/auth/refresh",
-            {
-              refresh_token: refreshToken,
-            }
-          );
-
-          const { access_token } = response.data;
-
-          setAccessToken(access_token);
-          localStorage.setItem("accessToken", access_token);
-
-            // Decode token to get user details
-            const decodedToken = jwtDecode(access_token);
-            console.log(decodedToken);
-            setUser({
-              email: decodedToken.email,
-              role: decodedToken.role,
-            });
-        } catch (error) {
-          console.error("Token refresh failed:", error);
-        }
-      }
-    };
-
-    // Check and refresh token periodically
-    const interval = setInterval(refreshAccessToken, 1 * 60 * 1000); // Refresh every 1 minutes
-
+    refreshAccessToken();
+    const interval = setInterval(refreshAccessToken, 14 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [accessToken]); // Run effect when `accessToken` changes
+  }, [refreshAccessToken]);
 
   const login = async (email, password) => {
     try {
       const response = await axios.post(
         "http://localhost:7070/api/auth/login",
-        {
-          email,
-          password,
-        }
+        { email, password }
       );
 
-      const { access_token , refresh_token } = response.data;
+      const { access_token, refresh_token } = response.data;
 
-      setAccessToken(access_token); 
+      setAccessToken(access_token);
       setRefreshToken(refresh_token);
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("refreshToken", refresh_token);
 
-      // Decode token to get user details
       const decodedToken = jwtDecode(access_token);
-      console.log(decodedToken);
       setUser({
         email: decodedToken.email,
         role: decodedToken.role,
@@ -82,14 +75,16 @@ const UserProvider = ({ children }) => {
 
   const logout = () => {
     setAccessToken(null);
+    setRefreshToken(null);
     setUser(null);
-
     localStorage.removeItem("accessToken");
-    // No need to remove refresh token since it's managed by cookies
+    localStorage.removeItem("refreshToken");
   };
 
   return (
-    <UserContext.Provider value={{ user, accessToken, login, logout }}>
+    <UserContext.Provider
+      value={{ user, accessToken, login, logout, isLoading }}
+    >
       {children}
     </UserContext.Provider>
   );

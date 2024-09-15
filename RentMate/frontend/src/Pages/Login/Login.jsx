@@ -1,4 +1,6 @@
+// Login.jsx
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 import validation from "./Validation";
 import { UserContext } from "../../hooks/UserContext";
@@ -7,6 +9,7 @@ import Loader from "../shared/loader";
 
 const Login = () => {
   const { login } = useContext(UserContext);
+  const navigate = useNavigate();
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -17,9 +20,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors(validation(values));
+    const validationErrors = validation(values);
+    setErrors(validationErrors);
 
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(validationErrors).length === 0) {
       setIsLoading(true);
       try {
         const role = await login(values.email, values.password);
@@ -29,31 +33,29 @@ const Login = () => {
           icon: "success",
           title: "Success",
           text: "User Logged In Successfully!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            switch (role) {
-              case "Regular User":
-                window.location.href = "/customer";
-                break;
-              case "Vehicle Owner":
-                window.location.href = "/vehicleOwner";
-                break;
-              case "Showroom Owner":
-                window.location.href = "/showroomOwner";
-                break;
-              case "Landlord":
-                window.location.href = "/landlord";
-                break;
-              case "Lawyer":
-                window.location.href = "/lawyer";
-                break;
-              case "Site Owner":
-                window.location.href = "/siteOwner";
-                break;
-              default:
-                window.location.href = "/";
-                break;
-            }
+        }).then(() => {
+          switch (role) {
+            case "Regular User":
+              navigate("/customer");
+              break;
+            case "Vehicle Owner":
+              navigate("/vehicleOwner");
+              break;
+            case "Showroom Owner":
+              navigate("/showroomOwner");
+              break;
+            case "Landlord":
+              navigate("/landlord");
+              break;
+            case "Lawyer":
+              navigate("/lawyer");
+              break;
+            case "Site Owner":
+              navigate("/siteOwner");
+              break;
+            default:
+              navigate("/");
+              break;
           }
         });
       } catch (error) {
@@ -62,7 +64,6 @@ const Login = () => {
       }
     }
   };
-
   return (
     <div>
       {isLoading && <Loader />}
