@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../hooks/UserContext"; // Import UserContext
+import { UserContext } from "../../hooks/UserContext";
 import Login from "./images/RentMate.png";
 import styles from "./navbar.module.css";
 
 const Navbar = () => {
-  const { user, logout } = useContext(UserContext); // Use UserContext
+  const { user, logout } = useContext(UserContext);
 
   // Debugging output
   console.log("User Context:", { user });
@@ -19,8 +19,8 @@ const Navbar = () => {
     <div>
       <nav className={styles.navbar}>
         <div className={styles.left}>
-          <Link to="/" className={styles.link}>
-            <img src={Login} alt="site-logo" />
+          <Link to='/' className={styles.link}>
+            <img src={Login} alt='site-logo' />
             <span className={styles.sitename}>RentMate</span>
           </Link>
         </div>
@@ -32,10 +32,14 @@ const Navbar = () => {
           ) : (
             <>
               <button>
-                <Link to="/signup" className={styles.link}>Signup</Link>
+                <Link to='/signup' className={styles.link}>
+                  Signup
+                </Link>
               </button>
               <button>
-                <Link to="/login" className={styles.link}>Login</Link>
+                <Link to='/login' className={styles.link}>
+                  Login
+                </Link>
               </button>
             </>
           )}
