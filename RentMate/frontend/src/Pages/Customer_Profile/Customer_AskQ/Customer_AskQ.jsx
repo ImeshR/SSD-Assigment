@@ -44,15 +44,6 @@ const Customer_AskQ = ({ onSubmit, vehicleToEdit }) => {
     const validationErrors = validate(values);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
-      // onSubmit(values);
-      // setValues({
-      //   name: '',
-      //   email: '',
-      //   contactNumber: '',
-      //   date: '',
-      //   problem: '',
-      // });
-
       console.log(formDetails);
 
       await axios
@@ -82,15 +73,6 @@ const Customer_AskQ = ({ onSubmit, vehicleToEdit }) => {
     setFormDetails({ ...formDetails, [event.target.name]: event.target.value });
   };
 
-  // const handleImageUpload = (event) => {
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.onload = (event) => {us
-  //     setValues({ ...values, image: event.target.result });
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
-
   const validate = (values) => {
     const errors = {};
     if (!values.name) {
@@ -114,17 +96,6 @@ const Customer_AskQ = ({ onSubmit, vehicleToEdit }) => {
     }
     return errors;
   };
-
-  // const renderSubmitButton = () => {
-  //   if (vehicleToEdit) {
-  //     return <button type="submit">Submit</button>;
-  //    }
-  //   return <button type="submit">Add</button>;
-  // }
-  //};
-  //end
-
-  //start
 
   return (
     <div>
