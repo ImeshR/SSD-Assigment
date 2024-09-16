@@ -1,4 +1,3 @@
-// Login.jsx
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
@@ -8,11 +7,12 @@ import Swal from "sweetalert2";
 import Loader from "../shared/loader";
 
 const Login = () => {
-  const { login } = useContext(UserContext);
+  const { login, loginWithGoogle } = useContext(UserContext);
   const navigate = useNavigate();
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -64,6 +64,26 @@ const Login = () => {
       }
     }
   };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsGoogleLoading(true);
+      await loginWithGoogle();
+      setIsGoogleLoading(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Google Login Successful!",
+      }).then(() => {
+        navigate("/customer");
+      });
+    } catch (error) {
+      setIsGoogleLoading(false);
+      Swal.fire("Error", "Google login failed", "error");
+    }
+  };
+
   return (
     <div>
       {isLoading && <Loader />}
@@ -127,13 +147,22 @@ const Login = () => {
                 </div>
 
                 <button
-                  label='Submit'
+                  type='submit'
                   className={styles.btn1}
-                  disabled={isLoading}
+                  disabled={isLoading || isGoogleLoading} // Disable button during either login process
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </button>
                 <br />
+                <div className={styles.googleLoginContainer}>
+                  <button
+                    onClick={handleGoogleLogin}
+                    className={styles.googleBtn}
+                    disabled={isGoogleLoading} // Disable Google button during login
+                  >
+                    {isGoogleLoading ? "Logging in..." : "Login with Google"}
+                  </button>
+                </div>
                 <hr />
               </div>
             </div>

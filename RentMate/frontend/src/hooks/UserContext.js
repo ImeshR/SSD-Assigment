@@ -1,7 +1,7 @@
-// UserContext.js
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { auth, provider, signInWithPopup } from "../firebase";
 
 const UserContext = createContext();
 
@@ -75,6 +75,25 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const credential = result._tokenResponse;
+      const token = credential.oauthIdToken;
+
+      const decodedToken = jwtDecode(token);
+      setUser({
+        id: decodedToken.sub,
+        email: decodedToken.email,
+        name: decodedToken.name,
+      });
+
+      // Optionally, send token to backend for further verification and role-based routing.
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
+  };
+
   const logout = () => {
     setAccessToken(null);
     setRefreshToken(null);
@@ -85,7 +104,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, accessToken, login, logout, isLoading }}
+      value={{ user, accessToken, login, loginWithGoogle, logout, isLoading }}
     >
       {children}
     </UserContext.Provider>

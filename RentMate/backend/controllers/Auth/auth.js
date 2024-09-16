@@ -3,6 +3,7 @@
 import User from "../../models/Users/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import admin from "../../firebase.js";
 
 const SALT_ROUNDS = 10; // Reduced from 18 for better performance
 
@@ -87,6 +88,43 @@ export const logout = async (req, res, next) => {
       { refreshToken: null }
     );
     res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
+export const googleLogin = async (req, res, next) => {
+  try {
+    const { idToken } = req.body;
+
+    // Verify Firebase token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { email, name, picture } = decodedToken;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // If user doesn't exist, create a new one
+      user = new User({
+        username: name,
+        email,
+        password: null, // No password required for Google login
+        type: "Regular User",
+        refreshToken: null,
+      });
+      await user.save();
+    }
+
+    // Generate access and refresh tokens
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res
+      .status(200)
+      .json({ access_token: accessToken, refresh_token: refreshToken });
   } catch (err) {
     next(err);
   }

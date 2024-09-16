@@ -65,13 +65,13 @@
 }
 .check_action {
   justify-content: space-between;
-  
+
   width: 19px;
 }
 
 .form_button {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 .actions {
   margin-top: 15px;
@@ -124,14 +124,29 @@
   display: flex;
   justify-content: space-between;
 }
-.group .input1{
+.group .input1 {
   position: absolute;
-  right: 13px ;
-  top:50%;
+  right: 13px;
+  top: 50%;
   transform: translate(-50%, -50%);
   font-size: 18px;
   color: #919191;
   cursor: pointer;
   padding: 3px;
+}
+.googleLoginContainer {
+  margin-top: 20px;
+}
 
+.googleBtn {
+  background-color: #4285f4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.googleBtn:hover {
+  background-color: #357ae8;
 }
