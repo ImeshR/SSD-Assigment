@@ -17,11 +17,7 @@ const HeroSection = () => {
               Search nearby House, Rooms and Apartments for rent
             </span>
           </div>
-          {/* <div className="search-box">
-            <form action="#">
-              <input type="text" />
-            </form>
-          </div> */}
+  
         </div>
       </div>
     </div>
