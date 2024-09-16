@@ -1,13 +1,8 @@
-// firebase.js
 import admin from "firebase-admin";
-import dotenv from "dotenv";
-dotenv.config();
+import serviceAccount from "./serviceAccount.json" assert { type: "json" };
 
-// Initialize Firebase Admin SDK
 admin.initializeApp({
-  credential: admin.credential.cert(
-    JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-  ),
+  credential: admin.credential.cert(serviceAccount),
 });
 
 export default admin;

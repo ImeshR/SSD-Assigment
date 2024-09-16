@@ -34,33 +34,15 @@ const Login = () => {
           title: "Success",
           text: "User Logged In Successfully!",
         }).then(() => {
-          switch (role) {
-            case "Regular User":
-              navigate("/customer");
-              break;
-            case "Vehicle Owner":
-              navigate("/vehicleOwner");
-              break;
-            case "Showroom Owner":
-              navigate("/showroomOwner");
-              break;
-            case "Landlord":
-              navigate("/landlord");
-              break;
-            case "Lawyer":
-              navigate("/lawyer");
-              break;
-            case "Site Owner":
-              navigate("/siteOwner");
-              break;
-            default:
-              navigate("/");
-              break;
-          }
+          navigateBasedOnRole(role);
         });
       } catch (error) {
         setIsLoading(false);
-        Swal.fire("Error", "Check your email and password again", "error");
+        Swal.fire(
+          "Error",
+          error.response?.data?.message || "Login failed",
+          "error"
+        );
       }
     }
   };
@@ -68,7 +50,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       setIsGoogleLoading(true);
-      await loginWithGoogle();
+      const role = await loginWithGoogle();
       setIsGoogleLoading(false);
 
       Swal.fire({
@@ -76,7 +58,7 @@ const Login = () => {
         title: "Success",
         text: "Google Login Successful!",
       }).then(() => {
-        navigate("/customer");
+        navigateBasedOnRole(role);
       });
     } catch (error) {
       setIsGoogleLoading(false);
@@ -84,6 +66,31 @@ const Login = () => {
     }
   };
 
+  const navigateBasedOnRole = (role) => {
+    switch (role) {
+      case "Regular User":
+        navigate("/customer");
+        break;
+      case "Vehicle Owner":
+        navigate("/vehicleOwner");
+        break;
+      case "Showroom Owner":
+        navigate("/showroomOwner");
+        break;
+      case "Landlord":
+        navigate("/landlord");
+        break;
+      case "Lawyer":
+        navigate("/lawyer");
+        break;
+      case "Site Owner":
+        navigate("/siteOwner");
+        break;
+      default:
+        navigate("/");
+        break;
+    }
+  };
   return (
     <div>
       {isLoading && <Loader />}

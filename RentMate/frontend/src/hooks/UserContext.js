@@ -32,6 +32,7 @@ const UserProvider = ({ children }) => {
           id: decodedToken.id,
           email: decodedToken.email,
           name: decodedToken.name,
+          role: decodedToken.role,
         });
       } catch (error) {
         console.error("Token refresh failed:", error);
@@ -54,21 +55,16 @@ const UserProvider = ({ children }) => {
         { email, password }
       );
 
-      const { access_token, refresh_token } = response.data;
+      const { access_token, refresh_token, user } = response.data;
 
       setAccessToken(access_token);
       setRefreshToken(refresh_token);
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("refreshToken", refresh_token);
 
-      const decodedToken = jwtDecode(access_token);
-      setUser({
-        id: decodedToken.id,
-        email: decodedToken.email,
-        name: decodedToken.name,
-      });
+      setUser(user);
 
-      return decodedToken.role;
+      return user.type;
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -78,28 +74,47 @@ const UserProvider = ({ children }) => {
   const loginWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const credential = result._tokenResponse;
-      const token = credential.oauthIdToken;
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
-      const decodedToken = jwtDecode(token);
-      setUser({
-        id: decodedToken.sub,
-        email: decodedToken.email,
-        name: decodedToken.name,
-      });
+      // Send idToken to backend
+      const response = await axios.post(
+        "http://localhost:7070/api/auth/google-login",
+        { idToken }
+      );
 
-      // Optionally, send token to backend for further verification and role-based routing.
+      const { access_token, refresh_token, user: userData } = response.data;
+
+      setAccessToken(access_token);
+      setRefreshToken(refresh_token);
+      localStorage.setItem("accessToken", access_token);
+      localStorage.setItem("refreshToken", refresh_token);
+
+      setUser(userData);
+
+      return userData.type;
     } catch (error) {
       console.error("Google login failed:", error);
+      throw error;
     }
   };
 
-  const logout = () => {
-    setAccessToken(null);
-    setRefreshToken(null);
-    setUser(null);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  const logout = async () => {
+    try {
+      if (refreshToken) {
+        await axios.post("http://localhost:7070/api/auth/logout", {
+          refresh_token: refreshToken,
+        });
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setAccessToken(null);
+      setRefreshToken(null);
+      setUser(null);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }
   };
 
   return (

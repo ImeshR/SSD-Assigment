@@ -1,17 +1,14 @@
-// controllers/Auth.js
-
 import User from "../../models/Users/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import admin from "../../firebase.js";
 
-const SALT_ROUNDS = 10; // Reduced from 18 for better performance
+const SALT_ROUNDS = 10;
 
 export const register = async (req, res, next) => {
   try {
     const { username, email, password, type } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res
@@ -49,12 +46,70 @@ export const login = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ access_token: accessToken, refresh_token: refreshToken });
+      .json({ access_token: accessToken, refresh_token: refreshToken, user });
   } catch (err) {
     next(err);
   }
 };
 
+export const googleLogin = async (req, res, next) => {
+  try {
+    const { idToken } = req.body;
+
+    // Verify Firebase token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email, name, picture } = decodedToken;
+
+    // Check if user exists in MongoDB
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user in MongoDB if not found
+      user = new User({
+        username: name,
+        email,
+        password: null, // No password for Google login
+        type: "Regular User", // or whatever default type you want for Google users
+        firebaseUid: uid,
+        profilePicture: picture,
+      });
+      await user.save();
+    } else {
+      // Update existing user with Firebase information
+      user.firebaseUid = uid;
+      user.profilePicture = picture;
+      await user.save();
+    }
+
+    // Generate access and refresh tokens
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.status(200).json({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        type: user.type,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (err) {
+    console.error("Google login error:", err);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Google login failed",
+        error: err.message,
+      });
+  }
+};
 export const refreshToken = async (req, res, next) => {
   try {
     const { refresh_token } = req.body;
@@ -88,43 +143,6 @@ export const logout = async (req, res, next) => {
       { refreshToken: null }
     );
     res.sendStatus(200);
-  } catch (err) {
-    next(err);
-  }
-};
-export const googleLogin = async (req, res, next) => {
-  try {
-    const { idToken } = req.body;
-
-    // Verify Firebase token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { email, name, picture } = decodedToken;
-
-    // Check if user exists
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      // If user doesn't exist, create a new one
-      user = new User({
-        username: name,
-        email,
-        password: null, // No password required for Google login
-        type: "Regular User",
-        refreshToken: null,
-      });
-      await user.save();
-    }
-
-    // Generate access and refresh tokens
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user._id);
-
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    res
-      .status(200)
-      .json({ access_token: accessToken, refresh_token: refreshToken });
   } catch (err) {
     next(err);
   }

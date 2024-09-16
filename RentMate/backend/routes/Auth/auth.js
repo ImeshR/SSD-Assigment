@@ -1,5 +1,3 @@
-// routes/Auth/auth.js
-
 import express from "express";
 import {
   login,
@@ -14,7 +12,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/refresh", refreshToken);
-router.post("/google-login", googleLogin);
-router.get("/logout", logout);
+router.post("/google-login", googleLogin); // POST request for Google login
+router.post("/logout", logout); // Updated logout to POST for proper token handling
 
 export default router;
