@@ -1,18 +1,40 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./reporttransaction.module.css";
 import styless from "../../Pages/Customer_Profile/Customer_Payment/Customer_Payment.jsx";
 import axios from "axios";
 import { Tag } from "primereact/tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Login from "../../components/navbar/images/RentMate.png";
 import {
   faEarthAmericas,
   faLocationCrosshairs,
   faMobileScreen,
 } from "@fortawesome/free-solid-svg-icons";
+import DOMPurify from "dompurify"; // Import DOMPurify to sanitize user input
+import Login from "../../components/navbar/images/RentMate.png";
 
 function Reporttransaction() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [reservation, setReservation] = useState([]);
+
+  // Fetch reservation details
+  useEffect(() => {
+    function getReservationDetails() {
+      axios
+        .get("http://localhost:8080/reservation/")
+        .then((res) => {
+          setReservation(res.data);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }
+
+    getReservationDetails();
+  }, []);
+
+  // Sanitize the data before rendering to prevent XSS
+  const sanitize = (data) => DOMPurify.sanitize(data);
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -34,29 +56,13 @@ function Reporttransaction() {
           icon="pi pi-info-circle"
           severity="warning"
           value="Pending"
-        ></Tag>
+        />
       );
     }
   };
 
-  const [reservation, setReservation] = useState([]);
-
-  useEffect(() => {
-    function getReservationDetails() {
-      axios
-        .get("http://localhost:8080/reservation/")
-        .then((res) => {
-          setReservation(res.data);
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    }
-
-    getReservationDetails();
-  }, []);
-
-  const filteredreservationData = reservation.filter((data) => {
+  // Filter the reservation data based on search term
+  const filteredReservationData = reservation.filter((data) => {
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const dataInfo =
       `${data.cardNumber} ${data.reserveItem} ${data.bookingDate} ${data.amount}`.toLowerCase();
@@ -119,7 +125,7 @@ function Reporttransaction() {
                   <div className={styles.data}>
                     <span>
                       Pasan Mawatha,Weliwita <br />
-                      Sri lanka
+                      Sri Lanka
                     </span>
                   </div>
                   <div className={styles.data_icon}>
@@ -139,6 +145,8 @@ function Reporttransaction() {
             </div>
           </div>
         </div>
+
+        {/* Transaction Table Section */}
         <div className={styles.trans_table}>
           <table>
             <thead>
@@ -150,13 +158,13 @@ function Reporttransaction() {
               </tr>
             </thead>
             <tbody>
-              {filteredreservationData.map((data) => (
-                <tr>
-                  <td>{data.cardNumber}</td>
-                  <td>{data.reserveItem}</td>
-                  <td>{data.bookingDate}</td>
+              {filteredReservationData.map((data) => (
+                <tr key={data.cardNumber}>
+                  <td>{sanitize(data.cardNumber)}</td>
+                  <td>{sanitize(data.reserveItem)}</td>
+                  <td>{sanitize(data.bookingDate)}</td>
                   <td>
-                    <strong>{data.amount}</strong>
+                    <strong>{sanitize(data.amount)}</strong>
                   </td>
                 </tr>
               ))}

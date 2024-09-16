@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import DOMPurify from "dompurify"; // import the DOMPurify library
 
 function Allcard() {
   const [card, setcard] = useState([]);
@@ -16,6 +17,7 @@ function Allcard() {
         alert(err.message);
       });
   }
+
   useEffect(() => {
     getCard();
   }, []);
@@ -33,6 +35,12 @@ function Allcard() {
         });
     }
   }
+
+  // Function to sanitize the values before rendering
+  const sanitize = (value) => {
+    return DOMPurify.sanitize(value);
+  };
+
   return (
     <table>
       <thead>
@@ -48,13 +56,13 @@ function Allcard() {
       <tbody>
         {card.map((pay) => (
           <tr key={pay._id}>
-            <td>{pay.name}</td>
-            <td>{pay.packages}</td>
-            <td>{pay.price}</td>
-            <td>{pay.cardnumber}</td>
-            <td>{pay.MM}</td>
-            <td>{pay.YY}</td>
-            <td>{pay.cvv}</td>
+            <td>{sanitize(pay.name)}</td>
+            <td>{sanitize(pay.packages)}</td>
+            <td>{sanitize(pay.price)}</td>
+            <td>{sanitize(pay.cardnumber)}</td>
+            <td>{sanitize(pay.MM)}</td>
+            <td>{sanitize(pay.YY)}</td>
+            <td>{sanitize(pay.cvv)}</td>
             <td>
               <Link to={`/EditPayment/${pay._id}`}>
                 <button type="submit">Edit</button>

@@ -1,31 +1,44 @@
-import React, { useRef, useState, useEffect } from "react";
-import styles from "./reportblog.module.css";
-import styless from "../../../Pages/Main_Dashboard/BlogManagement/BlogList.jsx";
-import { Button } from "primereact/button";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Tag } from "primereact/tag";
 import { Link } from "react-router-dom";
+import { Tag } from "primereact/tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Login from "../../../components/navbar/images/RentMate.png";
 import {
   faEarthAmericas,
   faLocationCrosshairs,
   faMobileScreen,
 } from "@fortawesome/free-solid-svg-icons";
+import styles from "./reportblog.module.css";
+import styless from "../../../Pages/Main_Dashboard/BlogManagement/BlogList.jsx";
+import DOMPurify from "dompurify"; // Import DOMPurify to sanitize user input
+import Login from "../../../components/navbar/images/RentMate.png";
 
 const Reportblog = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [blog, setBlog] = useState([]);
+
+  // Fetch blog data securely
+  useEffect(() => {
+    function getBlog() {
+      axios
+        .get("http://localhost:8080/api/blog/")
+        .then((res) => {
+          setBlog(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    getBlog();
+  }, []);
+
+  // Sanitize the data before rendering to prevent XSS
+  const sanitize = (data) => DOMPurify.sanitize(data);
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  //   const ListingName = (text) => {
-  //     return text.substring(0, 20) + " ...";
-  //   };
-
-  //   const LocationText = (text) => {
-  //     return text.substring(0, 15) + " ...";
-  //   };
 
   const pickStatus = (status) => {
     if (status.toLowerCase() === "active") {
@@ -44,26 +57,11 @@ const Reportblog = () => {
           icon="pi pi-info-circle"
           severity="warning"
           value="Pending"
-        ></Tag>
+        />
       );
     }
   };
 
-  const [blog, setblog] = useState([]);
-  useEffect(() => {
-    function getBlog() {
-      axios
-        .get("http://localhost:8080/api/blog/")
-        .then((res) => {
-          setblog(res.data);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    getBlog();
-  }, []);
   const filteredData = blog.filter((data) => {
     const searchTerms = searchTerm.toLowerCase().split(" ");
     const dataInfo =
@@ -147,35 +145,28 @@ const Reportblog = () => {
             </div>
           </div>
         </div>
+
+        {/* Blog List Section */}
         <div className={styless.tablearea__content}>
           <table>
-            <tr>
-              <th>Title</th>
-              <th>Id</th>
-              <th>Content</th>
-              <th>Date</th>
-            </tr>
-            {filteredData.map((data) => (
-              <tr key={data.id}>
-                <td>{data.title}</td>
-                <td>{data.idNo}</td>
-                <td>{data.content}</td>
-                <td>{data.date}</td>
-
-                {/* <td>
-                    {data.image.length > 0 && (
-                      <Image
-                        src={data.image[0]}
-                        zoomSrc={data.image[0]}
-                        alt="Image"
-                        width="70"
-                        height="50"
-                        preview
-                      />
-                    )}
-                  </td> */}
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Id</th>
+                <th>Content</th>
+                <th>Date</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {filteredData.map((data) => (
+                <tr key={data.id}>
+                  <td>{sanitize(data.title)}</td>
+                  <td>{sanitize(data.idNo)}</td>
+                  <td>{sanitize(data.content)}</td>
+                  <td>{sanitize(data.date)}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
