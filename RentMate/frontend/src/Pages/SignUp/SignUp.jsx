@@ -79,6 +79,12 @@ const SignUp = () => {
           <div className={stylesss.newUser}>
             <div className={stylesss.newUserTitle}>
               <b>Sign Up</b>
+              <br />
+              <span className=' text-lg'> Already have an account? </span>
+
+              <a href='/login' className='text-blue-800 text-lg underline'>
+                Login !
+              </a>
             </div>
             <form className={stylesss.newUserForm} onSubmit={handleSubmit}>
               <div className={stylesss.newUserRow}>

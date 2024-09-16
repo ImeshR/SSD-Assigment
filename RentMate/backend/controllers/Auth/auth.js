@@ -1,16 +1,14 @@
-// controllers/Auth.js
-
 import User from "../../models/Users/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import admin from "../../firebase.js";
 
-const SALT_ROUNDS = 10; // Reduced from 18 for better performance
+const SALT_ROUNDS = 10;
 
 export const register = async (req, res, next) => {
   try {
     const { username, email, password, type } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res
@@ -48,12 +46,76 @@ export const login = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ access_token: accessToken, refresh_token: refreshToken });
+      .json({ access_token: accessToken, refresh_token: refreshToken, user });
   } catch (err) {
     next(err);
   }
 };
 
+export const googleLogin = async (req, res, next) => {
+  try {
+    const { idToken } = req.body;
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email, name, picture } = decodedToken;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        username: name,
+        email,
+        password: null,
+        type: "Regular User",
+        firebaseUid: uid,
+        profilePicture: picture,
+      });
+      await user.save();
+    } else {
+      user.firebaseUid = uid;
+      user.profilePicture = picture;
+      await user.save();
+    }
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.status(200).json({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        type: user.type,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (err) {
+    console.error("Google login error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Google login failed",
+      error: err.message,
+    });
+  }
+};
+
+function generateAccessToken(user) {
+  return jwt.sign(
+    {
+      id: user._id,
+      name: user.username,
+      email: user.email,
+      type: user.type,
+      profilePicture: user.profilePicture,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" }
+  );
+}
 export const refreshToken = async (req, res, next) => {
   try {
     const { refresh_token } = req.body;
@@ -91,19 +153,6 @@ export const logout = async (req, res, next) => {
     next(err);
   }
 };
-
-function generateAccessToken(user) {
-  return jwt.sign(
-    {
-      id: user._id,
-      name: user.username,
-      email: user.email,
-      role: user.role,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" }
-  );
-}
 
 function generateRefreshToken(userId) {
   return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, {

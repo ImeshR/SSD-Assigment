@@ -1,4 +1,3 @@
-// Login.jsx
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
@@ -8,11 +7,12 @@ import Swal from "sweetalert2";
 import Loader from "../shared/loader";
 
 const Login = () => {
-  const { login } = useContext(UserContext);
+  const { login, loginWithGoogle } = useContext(UserContext);
   const navigate = useNavigate();
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -34,34 +34,61 @@ const Login = () => {
           title: "Success",
           text: "User Logged In Successfully!",
         }).then(() => {
-          switch (role) {
-            case "Regular User":
-              navigate("/customer");
-              break;
-            case "Vehicle Owner":
-              navigate("/vehicleOwner");
-              break;
-            case "Showroom Owner":
-              navigate("/showroomOwner");
-              break;
-            case "Landlord":
-              navigate("/landlord");
-              break;
-            case "Lawyer":
-              navigate("/lawyer");
-              break;
-            case "Site Owner":
-              navigate("/siteOwner");
-              break;
-            default:
-              navigate("/");
-              break;
-          }
+          navigateBasedOnRole(role);
         });
       } catch (error) {
         setIsLoading(false);
-        Swal.fire("Error", "Check your email and password again", "error");
+        Swal.fire(
+          "Error",
+          error.response?.data?.message || "Login failed",
+          "error"
+        );
       }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsGoogleLoading(true);
+      const role = await loginWithGoogle();
+      setIsGoogleLoading(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Google Login Successful!",
+      }).then(() => {
+        navigateBasedOnRole(role);
+      });
+    } catch (error) {
+      setIsGoogleLoading(false);
+      Swal.fire("Error", "Google login failed", "error");
+    }
+  };
+
+  const navigateBasedOnRole = (role) => {
+    switch (role) {
+      case "Regular User":
+        navigate("/customer");
+        break;
+      case "Vehicle Owner":
+        navigate("/vehicleOwner");
+        break;
+      case "Showroom Owner":
+        navigate("/showroomOwner");
+        break;
+      case "Landlord":
+        navigate("/landlord");
+        break;
+      case "Lawyer":
+        navigate("/lawyer");
+        break;
+      case "Site Owner":
+        navigate("/siteOwner");
+        break;
+      default:
+        navigate("/");
+        break;
     }
   };
   return (
@@ -74,8 +101,9 @@ const Login = () => {
             <div className={styles.inner}>
               <div className={styles.form_head}>
                 <div className={styles.title}>Login</div>
-                <span className={styles.subtitle}>Don't have an account?</span>
-                <a href='/signup' className={styles.maintext3}>
+                <span className={styles.subtitle}>Don't have an account? </span>
+
+                <a href='/signup' className='text-blue-800  underline'>
                   Create today!
                 </a>
               </div>
@@ -118,7 +146,7 @@ const Login = () => {
                 <div className={styles.form_button}>
                   <div className={styles.check_action}>
                     <input type='checkbox' name='remember' />
-                    <label> Remember me</label>
+                    <label>Remember me</label>
                   </div>
 
                   <a href='#' className={styles.link}>
@@ -127,13 +155,22 @@ const Login = () => {
                 </div>
 
                 <button
-                  label='Submit'
-                  className={styles.btn1}
-                  disabled={isLoading}
+                  type='submit'
+                  className={`bg-blue-500 w-full text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50`}
+                  disabled={isLoading || isGoogleLoading}
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </button>
                 <br />
+                <div className={styles.googleLoginContainer}>
+                  <button
+                    onClick={handleGoogleLogin}
+                    className={`bg-gray-800 text-white w-full py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 disabled:opacity-50`}
+                    disabled={isGoogleLoading}
+                  >
+                    {isGoogleLoading ? "Logging in..." : "Login with Google"}
+                  </button>
+                </div>
                 <hr />
               </div>
             </div>
