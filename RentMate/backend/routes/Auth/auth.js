@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/login", login);
 router.post("/refresh", refreshToken);
-router.post("/google-login", googleLogin); // POST request for Google login
-router.post("/logout", logout); // Updated logout to POST for proper token handling
+router.post("/google-login", googleLogin);
+router.post("/logout", logout);
 
 export default router;

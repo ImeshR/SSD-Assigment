@@ -55,33 +55,27 @@ export const login = async (req, res, next) => {
 export const googleLogin = async (req, res, next) => {
   try {
     const { idToken } = req.body;
-
-    // Verify Firebase token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { uid, email, name, picture } = decodedToken;
 
-    // Check if user exists in MongoDB
     let user = await User.findOne({ email });
 
     if (!user) {
-      // Create new user in MongoDB if not found
       user = new User({
         username: name,
         email,
-        password: null, // No password for Google login
-        type: "Regular User", // or whatever default type you want for Google users
+        password: null,
+        type: "Regular User",
         firebaseUid: uid,
         profilePicture: picture,
       });
       await user.save();
     } else {
-      // Update existing user with Firebase information
       user.firebaseUid = uid;
       user.profilePicture = picture;
       await user.save();
     }
 
-    // Generate access and refresh tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user._id);
 
@@ -101,15 +95,27 @@ export const googleLogin = async (req, res, next) => {
     });
   } catch (err) {
     console.error("Google login error:", err);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Google login failed",
-        error: err.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Google login failed",
+      error: err.message,
+    });
   }
 };
+
+function generateAccessToken(user) {
+  return jwt.sign(
+    {
+      id: user._id,
+      name: user.username,
+      email: user.email,
+      type: user.type,
+      profilePicture: user.profilePicture,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" }
+  );
+}
 export const refreshToken = async (req, res, next) => {
   try {
     const { refresh_token } = req.body;
@@ -147,19 +153,6 @@ export const logout = async (req, res, next) => {
     next(err);
   }
 };
-
-function generateAccessToken(user) {
-  return jwt.sign(
-    {
-      id: user._id,
-      name: user.username,
-      email: user.email,
-      role: user.role,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" }
-  );
-}
 
 function generateRefreshToken(userId) {
   return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, {

@@ -101,8 +101,9 @@ const Login = () => {
             <div className={styles.inner}>
               <div className={styles.form_head}>
                 <div className={styles.title}>Login</div>
-                <span className={styles.subtitle}>Don't have an account?</span>
-                <a href='/signup' className={styles.maintext3}>
+                <span className={styles.subtitle}>Don't have an account? </span>
+
+                <a href='/signup' className='text-blue-800  underline'>
                   Create today!
                 </a>
               </div>
@@ -145,7 +146,7 @@ const Login = () => {
                 <div className={styles.form_button}>
                   <div className={styles.check_action}>
                     <input type='checkbox' name='remember' />
-                    <label> Remember me</label>
+                    <label>Remember me</label>
                   </div>
 
                   <a href='#' className={styles.link}>
@@ -155,8 +156,8 @@ const Login = () => {
 
                 <button
                   type='submit'
-                  className={styles.btn1}
-                  disabled={isLoading || isGoogleLoading} // Disable button during either login process
+                  className={`bg-blue-500 w-full text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50`}
+                  disabled={isLoading || isGoogleLoading}
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </button>
@@ -164,8 +165,8 @@ const Login = () => {
                 <div className={styles.googleLoginContainer}>
                   <button
                     onClick={handleGoogleLogin}
-                    className={styles.googleBtn}
-                    disabled={isGoogleLoading} // Disable Google button during login
+                    className={`bg-gray-800 text-white w-full py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 disabled:opacity-50`}
+                    disabled={isGoogleLoading}
                   >
                     {isGoogleLoading ? "Logging in..." : "Login with Google"}
                   </button>

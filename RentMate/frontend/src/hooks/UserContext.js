@@ -32,7 +32,8 @@ const UserProvider = ({ children }) => {
           id: decodedToken.id,
           email: decodedToken.email,
           name: decodedToken.name,
-          role: decodedToken.role,
+          role: decodedToken.type,
+          profileImage: decodedToken.profilePicture,
         });
       } catch (error) {
         console.error("Token refresh failed:", error);
@@ -62,7 +63,13 @@ const UserProvider = ({ children }) => {
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("refreshToken", refresh_token);
 
-      setUser(user);
+      setUser({
+        id: user.id,
+        email: user.email,
+        name: user.username,
+        role: user.type,
+        profileImage: user.profilePicture,
+      });
 
       return user.type;
     } catch (error) {
@@ -77,7 +84,6 @@ const UserProvider = ({ children }) => {
       const user = result.user;
       const idToken = await user.getIdToken();
 
-      // Send idToken to backend
       const response = await axios.post(
         "http://localhost:7070/api/auth/google-login",
         { idToken }
@@ -90,7 +96,13 @@ const UserProvider = ({ children }) => {
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("refreshToken", refresh_token);
 
-      setUser(userData);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        name: userData.username,
+        role: userData.type,
+        profileImage: userData.profilePicture,
+      });
 
       return userData.type;
     } catch (error) {
