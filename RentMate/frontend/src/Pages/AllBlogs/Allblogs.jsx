@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import styles from "./allblog.module.css";
 import axios from "axios";
-
+//
 const Allblogs = () => {
   const [listings, setListings] = useState([]);
 
