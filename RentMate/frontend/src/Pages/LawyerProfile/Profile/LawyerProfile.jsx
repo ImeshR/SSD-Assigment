@@ -1,44 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../../components/navbar/Navbar'
-import Footer from '../../../components/footer/Footer'
-import styless from './laywerProfile.module.css'
+import React, { useState, useEffect, useContext } from 'react';
+import Navbar from '../../../components/navbar/Navbar';
+import Footer from '../../../components/footer/Footer';
+import styless from './laywerProfile.module.css';
 import { Link, useNavigate } from "react-router-dom";
-import Lawyer_SideBar from '../../../components/LawyerProfile_SideBar/Lawyer_SideBar'
-import Swal from 'sweetalert2'
+import Lawyer_SideBar from '../../../components/LawyerProfile_SideBar/Lawyer_SideBar';
+import Swal from 'sweetalert2';
 import axios from 'axios';
-
+import { UserContext } from '../../../hooks/UserContext';  
 
 const LawyerProfile = () => {
-
   const navigate = useNavigate();
-
+  
+  const { user } = useContext(UserContext);  // Accessing user context
+  const userid = user?.id; // Getting user id from context or fallback to localStorage
+  
   const paid = localStorage.getItem('paid');
-  const userid = localStorage.getItem("id");
+  const [lawyer, setLawyer] = useState([]);
+
   useEffect(() => {
     axios.get(`http://localhost:7070/api/lawyer/user/${userid}`)
       .then((res) => setLawyer(res.data))
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
+  }, [userid]);
 
-  }, [])
-
-  if (paid === 'false') {
-
-    Swal.fire(
-      'Problem!',
-      'You have to pay the subscription fee first!',
-      'error'
-    ).then(() => {
-      navigate("/lawyer/lsubscription");
-    })
-  }
-  else {
-    axios.get(`http://localhost:7070/api/lawyer/user/${userid}`)
-      .then((res) => setLawyer(res.data))
-      .catch((err) => console.log(err))
-  }
-
-  const [lawyer, setLawyer] = useState([])
-
+  useEffect(() => {
+    if (paid === 'false') {
+      Swal.fire(
+        'Problem!',
+        'You have to pay the subscription fee first!',
+        'error'
+      ).then(() => {
+        navigate("/lawyer/lsubscription");
+      });
+    } else {
+      axios.get(`http://localhost:7070/api/lawyer/user/${userid}`)
+        .then((res) => setLawyer(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [paid, navigate, userid]);
 
 
   // if (lawyer.length === 0) {
