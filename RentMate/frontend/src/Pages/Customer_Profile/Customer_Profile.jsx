@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { UserContext } from "../../hooks/UserContext"; // Imported UserContext
 import "./customer_Profile.css";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
@@ -7,32 +8,29 @@ import Navigator from "../../components/Customer_Profile/profile_nav/Profile_nav
 import Info_Card from "../../components/Customer_Profile/info_card/Info_card";
 
 const Customer_Profile = () => {
-
-  // const [task, setTask] = useState("");
+  const { user } = useContext(UserContext); // Extracted user from UserContext
   const [task, setTask] = useState("");
   const [dataCount, setDataCount] = useState(0);
-  
-  //get user id from storage
-  const userid = localStorage.getItem("id");
+
+  // Use the id from the UserContext instead of localStorage
+  const userid = user?.id;
 
   const handleChange = (e) => {
     setTask(e.target.value);
-  }; 
+  };
 
   const submitHandler = (e) => {
-    console.log(task);
     e.preventDefault();
-    axios.post("http://localhost:7070/api/customer/insert",{
-      userid: userid,
-      content: task,
-    })
-      .then((response) => {
-        // console.log(response);
+    axios
+      .post("http://localhost:7070/api/customer/insert", {
+        userid: userid,
+        content: task,
+      })
+      .then(() => {
         window.location.reload();
       })
       .catch((error) => {
         console.log(error);
-        // handle the error, if needed
       });
   };
 
@@ -45,26 +43,22 @@ const Customer_Profile = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [userid]);
 
-  // const [tododata, setAllData] = useState([]);
   useEffect(() => {
     function getTodos() {
-      axios(`http://localhost:7070/api/customer/gettodo/${userid}`) 
+      axios(`http://localhost:7070/api/customer/gettodo/${userid}`)
         .then((res) => {
           setTodos(res.data);
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
     getTodos();
-  }, []);
-  
-  
+  }, [userid]);
+
   const [todos, setTodos] = useState([]);
-  
   // Assuming todos is an array of documents
   
   

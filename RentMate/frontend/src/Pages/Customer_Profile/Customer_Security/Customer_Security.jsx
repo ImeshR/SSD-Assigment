@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./customer_Security.module.css";
 import Navbar from "../../../components/navbar/Navbar";
 import Footer from "../../../components/footer/Footer";
@@ -8,9 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Swal from "sweetalert2";
-        
+import { UserContext } from "../../../hooks/UserContext";  // Hook integration
 
 const Customer_Security = () => {
+  const { user } = useContext(UserContext);  // Access user details from context
   const [isPasswordFormVisible, setNameFormVisible] = useState(false);
   const [passwordcontainer, setPassword] = useState("");
 
@@ -18,126 +19,82 @@ const Customer_Security = () => {
     setNameFormVisible(!isPasswordFormVisible);
   };
 
-const  handlepassword = (event) => {
+  const handlepassword = (event) => {
     setPassword({
       ...passwordcontainer,
-      password: event.target.value
+      password: event.target.value,
     });
   };
 
   function validatePassword(password) {
-    // At least 8 characters
-    if (password.length < 8) {
-      return false;
-    }
-  
-    // Contains at least one lowercase letter
-    if (!/[a-z]/.test(password)) {
-      return false;
-    }
-  
-    // Contains at least one uppercase letter
-    if (!/[A-Z]/.test(password)) {
-      return false;
-    }
-  
-    // Contains at least one digit
-    if (!/\d/.test(password)) {
-      return false;
-    }
-  
-    // Contains at least one special character
-    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-      return false;
-    }
-  
-    // All conditions passed, the password is valid
+    if (password.length < 8) return false;
+    if (!/[a-z]/.test(password)) return false;
+    if (!/[A-Z]/.test(password)) return false;
+    if (!/\d/.test(password)) return false;
+    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) return false;
+
     return true;
   }
 
   // handle form submit
-const handleSubmit = (event) => {
-  event.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  const userid = localStorage.getItem("id");
+    axios.put(`http://localhost:7070/api/customer/updatepassword/${user.id}`, {
+      password: passwordcontainer.password,
+    })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Updated Successfully!",
+        }).then(() => {
+          window.location = "http://localhost:3000/login";
+        });
+      })
+      .catch((err) => {
+        Swal.fire("Error", "Check your inserted Details", "error");
+      });
 
-  axios.put(`http://localhost:7070/api/customer/updatepassword/${userid}`, {
-    password: passwordcontainer.password,
-  })
-  .then((res) => {
-    console.log(res.data);
-    Swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: 'Updated Successfully!'
-    }).then(function() {
-      // Redirect the user to the login page
-      window.location = "http://localhost:3000/login";
-  });
-  })
-  .catch((err) => {
-    console.log(err);
-    Swal.fire(
-      'Error',
-      'Check your inserted Details',
-      'error'
-    );
-  });
+    handlePasswordFormVisibility();
+  };
 
-  handlePasswordFormVisibility();
-};
-  
   function checkPasswordsMatch() {
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-  
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
     if (newPassword === confirmPassword) {
-      
       const isValid = validatePassword(newPassword);
-        if (isValid) {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-          })
-          
-          Toast.fire({
-            icon: 'success',
-            title: 'Password is valid!'
-          })
-          // console.log("Password is valid!");
-          // document.getElementById('submitButton').disabled = false;
-        } else {
-          console.log("Password is invalid!");
-        }
+      if (isValid) {
+        Swal.fire({
+          icon: "success",
+          title: "Password is valid!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Password is invalid!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      }
     } else {
-      const Toast = Swal.mixin({
+      Swal.fire({
+        icon: "error",
+        title: "Passwords do not match!",
         toast: true,
-        position: 'top-end',
+        position: "top-end",
         showConfirmButton: false,
         timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      })
-      
-      Toast.fire({
-        icon: 'error',
-        title: 'Passwords do not match!'
-      })
-      // console.log('Passwords do not match!');
-      // document.getElementById('submitButton').disabled = true;
+      });
     }
   }
-  
   
 
 
