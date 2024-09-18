@@ -6,6 +6,7 @@ import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
+import csurf from "csurf";
 
 // Route imports
 import customerRouter from "./routes/Customer/customer.js";
@@ -30,18 +31,57 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 7070;
 
-// Middleware
-app.use(helmet()); // Adds various HTTP headers for security
-app.use(compression()); // Compresses response bodies
-app.use(cors()); // Configure CORS as needed
-app.use(express.json({ limit: "10mb" })); // Replaces bodyParser.json() with a size limit
+// Enhanced Helmet configuration
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      },
+    },
+    referrerPolicy: {
+      policy: "strict-origin-when-cross-origin",
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
+
+// Reduce server fingerprinting
+app.disable("x-powered-by");
+
+app.use(compression());
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // or whatever your frontend URL is
+    credentials: true,
+  })
+);
+
+// CSRF protection
+// CSRF protection
+const csrfProtection = csurf({
+  cookie: {
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production", // set to true in production
+    httpOnly: true,
+  },
+});
+app.use(csrfProtection);
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 app.use(limiter);
 
@@ -74,6 +114,10 @@ app.use("/api/userr", userRouter);
 app.use("/api/vehi", manageVehicleRouter);
 app.use("/api/bookingVehicle", authenticateUser, bookingRouter);
 
+// CSRF token route
+app.get("/api/csrf-token", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 // Global error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

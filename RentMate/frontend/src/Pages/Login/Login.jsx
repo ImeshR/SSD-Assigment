@@ -1,18 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 import validation from "./Validation";
 import { UserContext } from "../../hooks/UserContext";
 import Swal from "sweetalert2";
 import Loader from "../shared/loader";
+import axios from "axios";
 
 const Login = () => {
-  const { login, loginWithGoogle } = useContext(UserContext);
+  const { login, loginWithGoogle, csrfToken, fetchCsrfToken } =
+    useContext(UserContext);
   const navigate = useNavigate();
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  useEffect(() => {
+    if (csrfToken) {
+      axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
+    }
+  }, [csrfToken]);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -26,6 +34,7 @@ const Login = () => {
     if (Object.keys(validationErrors).length === 0) {
       setIsLoading(true);
       try {
+        await fetchCsrfToken(); // Fetch new CSRF token before login
         const role = await login(values.email, values.password);
         setIsLoading(false);
 
@@ -46,7 +55,6 @@ const Login = () => {
       }
     }
   };
-
   const handleGoogleLogin = async () => {
     try {
       setIsGoogleLoading(true);
