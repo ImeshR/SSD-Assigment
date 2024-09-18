@@ -14,10 +14,25 @@ const UserProvider = ({ children }) => {
     localStorage.getItem("refreshToken")
   );
   const [isLoading, setIsLoading] = useState(true);
+  const [csrfToken, setCsrfToken] = useState(null);
+
+  const fetchCsrfToken = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:7070/api/csrf-token", {
+        withCredentials: true,
+      });
+      setCsrfToken(data.csrfToken);
+      axios.defaults.headers.common["X-CSRF-Token"] = data.csrfToken;
+      axios.defaults.withCredentials = true; // This ensures cookies are sent with every request
+    } catch (error) {
+      console.error("Failed to fetch CSRF token:", error);
+    }
+  };
 
   const refreshAccessToken = useCallback(async () => {
     if (refreshToken) {
       try {
+        await fetchCsrfToken(); // Fetch new CSRF token before making the request
         const response = await axios.post(
           "http://localhost:7070/api/auth/refresh",
           { refresh_token: refreshToken }
@@ -44,6 +59,7 @@ const UserProvider = ({ children }) => {
   }, [refreshToken]);
 
   useEffect(() => {
+    fetchCsrfToken();
     refreshAccessToken();
     const interval = setInterval(refreshAccessToken, 14 * 60 * 1000);
     return () => clearInterval(interval);
@@ -51,6 +67,7 @@ const UserProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      await fetchCsrfToken(); // Fetch new CSRF token before making the request
       const response = await axios.post(
         "http://localhost:7070/api/auth/login",
         { email, password }
@@ -84,6 +101,7 @@ const UserProvider = ({ children }) => {
       const user = result.user;
       const idToken = await user.getIdToken();
 
+      await fetchCsrfToken(); // Fetch new CSRF token before making the request
       const response = await axios.post(
         "http://localhost:7070/api/auth/google-login",
         { idToken }
@@ -114,6 +132,7 @@ const UserProvider = ({ children }) => {
   const logout = async () => {
     try {
       if (refreshToken) {
+        await fetchCsrfToken(); // Fetch new CSRF token before making the request
         await axios.post("http://localhost:7070/api/auth/logout", {
           refresh_token: refreshToken,
         });
@@ -131,7 +150,16 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, accessToken, login, loginWithGoogle, logout, isLoading }}
+      value={{
+        user,
+        accessToken,
+        login,
+        loginWithGoogle,
+        logout,
+        isLoading,
+        csrfToken,
+        fetchCsrfToken,
+      }}
     >
       {children}
     </UserContext.Provider>

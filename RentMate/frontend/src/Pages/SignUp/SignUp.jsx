@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { Toast } from "primereact/toast";
 import stylesss from "./signUp.module.css";
 import Validation from "./Validation";
@@ -6,6 +6,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import Loader from "../shared/loader";
+import { UserContext } from "../../hooks/UserContext";
 const SignUp = () => {
   const navigate = useNavigate();
   const toast = useRef(null);
@@ -23,6 +24,21 @@ const SignUp = () => {
 
   const [errors, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchCsrfToken } = useContext(UserContext);
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const { data } = await axios.get(
+          "http://localhost:7070/api/csrf-token"
+        );
+        axios.defaults.headers.common["X-CSRF-Token"] = data.csrfToken;
+      } catch (error) {
+        console.error("Failed to fetch CSRF token:", error);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -36,6 +52,7 @@ const SignUp = () => {
     if (Object.keys(validation).length === 0) {
       setIsLoading(true);
       try {
+        await fetchCsrfToken(); // Fetch new CSRF token before registration
         const response = await axios.post(
           "http://localhost:7070/api/auth/register",
           {
@@ -43,7 +60,8 @@ const SignUp = () => {
             email: values.email,
             password: values.password,
             type: values.type,
-          }
+          },
+          { withCredentials: true }
         );
         console.log(response.data);
         setIsLoading(false);
@@ -63,7 +81,7 @@ const SignUp = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Check your email or password again!",
+          text: " your email already exists ",
         });
       }
     }
