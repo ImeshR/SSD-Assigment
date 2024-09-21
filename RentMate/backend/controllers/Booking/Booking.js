@@ -22,7 +22,7 @@ export const createbooking = async (req, res, next) => {
     customerID,
     vehicleOwner,
   });
-
+  //s
   if (newAdded) {
     res.json(newAdded);
   } else {
