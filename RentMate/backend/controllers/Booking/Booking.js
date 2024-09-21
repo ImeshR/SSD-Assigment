@@ -1,8 +1,6 @@
 import Booking from "../../models/Booking/Booking.js";
 
-
 export const createbooking = async (req, res, next) => {
-
   const {
     deliveryLocation,
     deliveryDate,
@@ -11,8 +9,8 @@ export const createbooking = async (req, res, next) => {
     amount,
     vehicleID,
     customerID,
-    vehicleOwner
-  } = req.body
+    vehicleOwner,
+  } = req.body;
 
   const newAdded = await Booking.create({
     deliveryLocation,
@@ -22,14 +20,13 @@ export const createbooking = async (req, res, next) => {
     amount,
     vehicleID,
     customerID,
-    vehicleOwner
-  })
+    vehicleOwner,
+  });
 
   if (newAdded) {
-    res.json(newAdded)
-  }
-  else {
-    res.json({ message: "something went wrong" })
+    res.json(newAdded);
+  } else {
+    res.json({ message: "something went wrong" });
   }
 };
 
@@ -55,7 +52,7 @@ export const deletebooking = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}
+};
 
 // GET
 export const getbooking = async (req, res, next) => {
@@ -75,7 +72,7 @@ export const getAllbooking = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}
+};
 
 //get vehicles by owner ID
 export const getbookingByOwnerID = async (req, res, next) => {
@@ -85,4 +82,4 @@ export const getbookingByOwnerID = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}
+};
