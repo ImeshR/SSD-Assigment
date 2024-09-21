@@ -14,7 +14,7 @@ const AddNewProperty = () => {
   const home = { icon: "pi pi-th-large", url: "/landlord" };
 
   //get user id from local storage
-  const userid = localStorage.getItem("id");
+  const userid = "60f3b3b3b3b3b3b3b3b3b3b3";
   
 
   const [name, setProperty] = useState("");

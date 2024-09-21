@@ -104,7 +104,7 @@ const Vehicle = () => {
   useEffect(() => {
     function getVehicle() {
       axios
-        .get(`http://localhost:7070/api/vehi/user/${id}`)
+        .get(`http://localhost:7070/api/vehi/user/60f3b3b3b3b3b3b3b3b3b3`)
         .then((res) => {
           setVehicle(res.data);
           console.log(res.data);

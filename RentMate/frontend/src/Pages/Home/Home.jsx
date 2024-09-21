@@ -18,8 +18,8 @@ const Home = () => {
       <HeroSection />
       <Properties />
       <Transports />
-      <Showrooms />
-      <Lawyers />
+      {/* <Showrooms />
+      <Lawyers /> */}
       <Footer />
     </div>
   );

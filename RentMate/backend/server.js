@@ -62,21 +62,10 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000", // or whatever your frontend URL is
+    origin: "http://localhost:3000", 
     credentials: true,
   })
 );
-
-// CSRF protection
-// CSRF protection
-const csrfProtection = csurf({
-  cookie: {
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production", // set to true in production
-    httpOnly: true,
-  },
-});
-app.use(csrfProtection);
 
 // Rate limiting
 const limiter = rateLimit({
@@ -102,8 +91,8 @@ mongoose.connection.on("disconnected", () => {
 app.use("/api/auth", authRouter);
 app.use("/api/customer", authenticateUser, customerRouter);
 app.use("/card", authenticateUser, cardDetailsRouter);
-app.use("/reservation", authenticateUser, reservationDetailRouter);
-app.use("/api/manageListings", authenticateUser, manageListingRouter);
+app.use("/reservation", reservationDetailRouter);
+app.use("/api/manageListings", manageListingRouter);
 app.use("/api/Furniture", managefurnitureRouter);
 app.use("/api/Showroom", manageshowroomRouter);
 app.use("/api/landlordinfo", manageListingRouter);
@@ -112,12 +101,8 @@ app.use("/api/problems", authenticateUser, problemsRouter);
 app.use("/api/lawyer", lawyerRouter);
 app.use("/api/userr", userRouter);
 app.use("/api/vehi", manageVehicleRouter);
-app.use("/api/bookingVehicle", authenticateUser, bookingRouter);
+app.use("/api/bookingVehicle", bookingRouter);
 
-// CSRF token route
-app.get("/api/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
 // Global error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

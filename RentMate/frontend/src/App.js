@@ -222,6 +222,8 @@ function App() {
         <Route path="/payment/:role" element={<PaymentForm />} />
         {/* 404 Error Page */}
         <Route path="*" element={<Missing />} />
+        <Route path="/unauthorized" element={<Missing />} />
+
   
       </Routes>
     </div>

@@ -105,7 +105,7 @@ const Properties = () => {
                       />
                     </span>
                   </div>
-                  <div className={styles.smallinfo}>
+                  {/* <div className={styles.smallinfo}>
                     <span
                       className={styles.link}
                       onClick={() => navigateToProperty(property._id)}
@@ -113,7 +113,7 @@ const Properties = () => {
                       <span>{property.name}</span>
                     </span>
                     <div className={styles.price}>${property.price}</div>
-                  </div>
+                  </div> */}
                 </div>
               ))
             ) : (
