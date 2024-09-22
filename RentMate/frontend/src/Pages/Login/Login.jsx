@@ -8,19 +8,12 @@ import Loader from "../shared/loader";
 import axios from "axios";
 
 const Login = () => {
-  const { login, loginWithGoogle, csrfToken, fetchCsrfToken } =
-    useContext(UserContext);
+  const { login, loginWithGoogle } = useContext(UserContext);
   const navigate = useNavigate();
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-
-  useEffect(() => {
-    if (csrfToken) {
-      axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
-    }
-  }, [csrfToken]);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -34,7 +27,6 @@ const Login = () => {
     if (Object.keys(validationErrors).length === 0) {
       setIsLoading(true);
       try {
-        await fetchCsrfToken(); // Fetch new CSRF token before login
         const role = await login(values.email, values.password);
         setIsLoading(false);
 
@@ -55,9 +47,10 @@ const Login = () => {
       }
     }
   };
+
   const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
     try {
-      setIsGoogleLoading(true);
       const role = await loginWithGoogle();
       setIsGoogleLoading(false);
 
@@ -99,6 +92,7 @@ const Login = () => {
         break;
     }
   };
+
   return (
     <div>
       {isLoading && <Loader />}
@@ -110,8 +104,7 @@ const Login = () => {
               <div className={styles.form_head}>
                 <div className={styles.title}>Login</div>
                 <span className={styles.subtitle}>Don't have an account? </span>
-
-                <a href='/signup' className='text-blue-800  underline'>
+                <a href='/signup' className='text-blue-800 underline'>
                   Create today!
                 </a>
               </div>
@@ -156,7 +149,6 @@ const Login = () => {
                     <input type='checkbox' name='remember' />
                     <label>Remember me</label>
                   </div>
-
                   <a href='#' className={styles.link}>
                     Forgot Password?
                   </a>
