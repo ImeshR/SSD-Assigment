@@ -3,19 +3,19 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Checkout from "./Pages/Checkout/Checkout";
 import Customer from "./Pages/Customer_Profile/Customer_Profile";
-import ForgetPassword from './Pages/ForgetPassword/ForgetPassword';
-import SignUp from './Pages/SignUp/SignUp';
-import Login from './Pages/Login/Login';
-import MainDashboard from './Pages/Main_Dashboard/Dashboard/MainDashboard';
-import ContactUs from './Pages/Contact_Us/ContactUs';
-import VehichleOwnerDash from './Pages/VehicleOwner_Dashboard/Dashboard/VehichleOwnerDash';
-import FaqPage from './Pages/FAQ/FaqPage';
-import Property from './Pages/Property/Property';
-import Addblog from './Pages/Main_Dashboard/BlogManagement/Add_blog/Addblog';
-import Customer_Settings from './Pages/Customer_Profile/Customer_Settings/Customer_Settings';
-import LandlordDash from './Pages/Landlord_Dashboard/Dashboard/LandlordDash';
-import Customer_Info from './Pages/Customer_Profile/Customer_Info/Customer_Info';
-import ShowroomDash from './Pages/Showroom_Dashboard/Dashboard/ShowroomDash';
+import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
+import SignUp from "./Pages/SignUp/SignUp";
+import Login from "./Pages/Login/Login";
+import MainDashboard from "./Pages/Main_Dashboard/Dashboard/MainDashboard";
+import ContactUs from "./Pages/Contact_Us/ContactUs";
+import VehichleOwnerDash from "./Pages/VehicleOwner_Dashboard/Dashboard/VehichleOwnerDash";
+import FaqPage from "./Pages/FAQ/FaqPage";
+import Property from "./Pages/Property/Property";
+import Addblog from "./Pages/Main_Dashboard/BlogManagement/Add_blog/Addblog";
+import Customer_Settings from "./Pages/Customer_Profile/Customer_Settings/Customer_Settings";
+import LandlordDash from "./Pages/Landlord_Dashboard/Dashboard/LandlordDash";
+import Customer_Info from "./Pages/Customer_Profile/Customer_Info/Customer_Info";
+import ShowroomDash from "./Pages/Showroom_Dashboard/Dashboard/ShowroomDash";
 import Customer_Security from "./Pages/Customer_Profile/Customer_Security/Customer_Security";
 import Missing from "./Pages/Error404/Missing";
 import LandlordMissing from "./Pages/Landlord_Dashboard/Error404/LandlordMissing";
@@ -23,15 +23,15 @@ import ShowroomMissing from "./Pages/Showroom_Dashboard/Error404/ShowroomMissing
 import MainDashMissing from "./Pages/Main_Dashboard/Error404/MainDashMissing";
 import VehicleDashMissing from "./Pages/VehicleOwner_Dashboard/Error404/VehicleDashMissing";
 import CustomerMissing from "./Pages/Customer_Profile/Error404/CustomerMissing";
-import Allproperties from './Pages/AllProperties/Allproperties'
-import Alllawyers from './Pages/AllLawyers/Alllawyers'
-import Allshowrooms from './Pages/AllShowrooms/Allshowrooms'
-import Alltransports from './Pages/AllTransports/Alltransports'
+import Allproperties from "./Pages/AllProperties/Allproperties";
+import Alllawyers from "./Pages/AllLawyers/Alllawyers";
+import Allshowrooms from "./Pages/AllShowrooms/Allshowrooms";
+import Alltransports from "./Pages/AllTransports/Alltransports";
 import Guidelines from "./Pages/GuideLines/Guidelines";
-import SupportCenter from './Pages/SupportCenter/SupportCenter'
-import Ourstory from './Pages/OurStory/Ourstory'
-import Ourteam from './Pages/OurTeam/Ourteam'
-import Feedback from './Pages/Feedback/Feedback'
+import SupportCenter from "./Pages/SupportCenter/SupportCenter";
+import Ourstory from "./Pages/OurStory/Ourstory";
+import Ourteam from "./Pages/OurTeam/Ourteam";
+import Feedback from "./Pages/Feedback/Feedback";
 import Allblogs from "./Pages/AllBlogs/Allblogs";
 import Artical from "./Pages/Articals/Artical";
 import Customer_Privacy from "./Pages/Customer_Profile/Customer_Privacy/Customer_Privacy";
@@ -84,147 +84,443 @@ import AddNewProperty from "./Pages/Landlord_Dashboard/Listings/AddListing/AddNe
 import UpdateListing from "./Pages/Landlord_Dashboard/Listings/UpdateListing/UpdateListing";
 import Update_userDetails from "./Pages/Main_Dashboard/Users/Update_userDetails/Update_userDetails";
 import Customer_Property from "./Pages/Customer_Profile/Customer_Property/Customer_Property";
-import AddCard from './Pages/Customer_Profile/Customer_Payment/CardForm/Addcard';
-import AllCard from './components/Card/Allcard'
-import PaymentForm from './Pages/PaymentForm/PaymentForm'
-import UpdateCard from './Pages/Customer_Profile/Customer_Payment/CardForm/Updatecard';
-
+import AddCard from "./Pages/Customer_Profile/Customer_Payment/CardForm/Addcard";
+import AllCard from "./components/Card/Allcard";
+import PaymentForm from "./Pages/PaymentForm/PaymentForm";
+import UpdateCard from "./Pages/Customer_Profile/Customer_Payment/CardForm/Updatecard";
+import Unauthorized from "./Pages/Unauthorized/Unauthorized";
+import ProtectedRoute from "./hooks/ProtectedRoute";
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
         {/* Route Path for SiteOwner */}
-        <Route path="/siteowner">
-          <Route index element={<MainDashboard/>}></Route>
-          <Route path='users' element={<Users/>}></Route>
-          <Route path='users/add-user' element={<Add_users/>}></Route>
-          <Route path='users/update-user-details' element={<Update_userDetails/>}></Route>
-          <Route path='pending-list/pending-properties' element={<PendingProperties/>}></Route>
-          <Route path='pending-list/pending-vehicles' element={<PendingVehicles/>}></Route>
-          <Route path='blog' element={<BlogList/>}></Route>
-          <Route path="blog/add-blog" element={<Addblog />}></Route>
-          <Route path="blog/update-blog" element={<Edit_blog/>}></Route>
-          <Route path='revenue' element={<SiteOwnerRevenue/>}></Route>
-          <Route path='support-center' element={<SupportCenterDash/>}></Route>
-          <Route path='support-center/replyInquary/:id' element={<ReplyUserInquary/>}></Route>
-          <Route path='support-center/add-record' element={<Add_NewRecord/>}></Route>
-          <Route path='settings' element={<SiteOwnerSettings/>}></Route>
-          <Route path='profile' element={<SiteOwnerProfile/>}></Route>
-          <Route path="*" element={<MainDashMissing />} />
+        <Route
+          path="/siteowner"
+          element={
+            <ProtectedRoute requiredRole="siteowner">
+              <MainDashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="users"
+            element={<Users />}
+          ></Route>
+          <Route
+            path="users/add-user"
+            element={<Add_users />}
+          ></Route>
+          <Route
+            path="users/update-user-details"
+            element={<Update_userDetails />}
+          ></Route>
+          <Route
+            path="pending-list/pending-properties"
+            element={<PendingProperties />}
+          ></Route>
+          <Route
+            path="pending-list/pending-vehicles"
+            element={<PendingVehicles />}
+          ></Route>
+          <Route
+            path="blog"
+            element={<BlogList />}
+          ></Route>
+          <Route
+            path="blog/add-blog"
+            element={<Addblog />}
+          ></Route>
+          <Route
+            path="blog/update-blog"
+            element={<Edit_blog />}
+          ></Route>
+          <Route
+            path="revenue"
+            element={<SiteOwnerRevenue />}
+          ></Route>
+          <Route
+            path="support-center"
+            element={<SupportCenterDash />}
+          ></Route>
+          <Route
+            path="support-center/replyInquary/:id"
+            element={<ReplyUserInquary />}
+          ></Route>
+          <Route
+            path="support-center/add-record"
+            element={<Add_NewRecord />}
+          ></Route>
+          <Route
+            path="settings"
+            element={<SiteOwnerSettings />}
+          ></Route>
+          <Route
+            path="profile"
+            element={<SiteOwnerProfile />}
+          ></Route>
+          <Route
+            path="*"
+            element={<MainDashMissing />}
+          />
         </Route>
         {/* End of the route Path for SiteOwner */}
 
         {/* Route Path for Landlord */}
-        <Route path="/landlord">
-          <Route index element={<LandlordDash />}></Route>
-          <Route path="listings" element={<PropertyListings/>}></Route>
-          <Route path="listings/add-listing" element={<AddNewProperty/>}></Route>
-          <Route path="listings/update-listing" element={<UpdateListing/>}></Route>
-          <Route path="reservations" element={<PropertyReservations/>}></Route>
-          <Route path="revenue" element={<LandlordRevenue/>}></Route>
-          <Route path="settings" element={<LandlordSettings/>}></Route>
-          <Route path="profile" element={<LandlordProfile/>}></Route>
-          <Route path="*" element={<LandlordMissing />} />
+        <Route
+          path="/landlord"
+          element={
+            <ProtectedRoute requiredRole="Landlord">
+              <LandlordDash />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="listings"
+            element={<PropertyListings />}
+          ></Route>
+          <Route
+            path="listings/add-listing"
+            element={<AddNewProperty />}
+          ></Route>
+          <Route
+            path="listings/update-listing"
+            element={<UpdateListing />}
+          ></Route>
+          <Route
+            path="reservations"
+            element={<PropertyReservations />}
+          ></Route>
+          <Route
+            path="revenue"
+            element={<LandlordRevenue />}
+          ></Route>
+          <Route
+            path="settings"
+            element={<LandlordSettings />}
+          ></Route>
+          <Route
+            path="profile"
+            element={<LandlordProfile />}
+          ></Route>
+          <Route
+            path="*"
+            element={<LandlordMissing />}
+          />
         </Route>
         {/* End of the route Path for Landlord */}
 
         {/* customer profile paths */}
-        <Route path="/customer">
-          <Route index element={<Customer />}></Route>
-          <Route path="setting/security" element={<Customer_Security/>}></Route>
-          <Route path="setting/privacy" element={<Customer_Privacy/>}></Route>
-          <Route path="setting" element={<Customer_Settings />}></Route>
-          <Route path="setting/info" element={<Customer_Info />}></Route>
-          <Route path="setting/report" element={<Customer_Report />}></Route>
-          <Route path="payment" element={<Customer_Payment />}></Route>
-          <Route path="*" element={<CustomerMissing />} />
-          <Route path="question" element={<Customer_QASection />}></Route>
-          <Route path="question/ask" element={<Customer_AskQ />}></Route>
-          <Route path="customer-property" element={<Customer_Property />}></Route>
-          <Route path="addcard" element={<AddCard/>}></Route>
-          <Route path="updatecard" element={<UpdateCard/>}></Route>
-          <Route path="allcard" element={<AllCard/>}></Route>
+        <Route
+          path="/customer"
+          element={
+            <ProtectedRoute requiredRole="Regular User">
+              <Customer />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="setting/security"
+            element={<Customer_Security />}
+          ></Route>
+          <Route
+            path="setting/privacy"
+            element={<Customer_Privacy />}
+          ></Route>
+          <Route
+            path="setting"
+            element={<Customer_Settings />}
+          ></Route>
+          <Route
+            path="setting/info"
+            element={<Customer_Info />}
+          ></Route>
+          <Route
+            path="setting/report"
+            element={<Customer_Report />}
+          ></Route>
+          <Route
+            path="payment"
+            element={<Customer_Payment />}
+          ></Route>
+          <Route
+            path="*"
+            element={<CustomerMissing />}
+          />
+          <Route
+            path="question"
+            element={<Customer_QASection />}
+          ></Route>
+          <Route
+            path="question/ask"
+            element={<Customer_AskQ />}
+          ></Route>
+          <Route
+            path="customer-property"
+            element={<Customer_Property />}
+          ></Route>
+          <Route
+            path="addcard"
+            element={<AddCard />}
+          ></Route>
+          <Route
+            path="updatecard"
+            element={<UpdateCard />}
+          ></Route>
+          <Route
+            path="allcard"
+            element={<AllCard />}
+          ></Route>
         </Route>
         {/* end of customer path */}
 
         {/* Route Path for Showroom Owner */}
-        <Route path="/showroomOwner">
-          <Route index element={<ShowroomDash />}></Route>
-          <Route path='showroom' element={<ManageShowroom/>}></Route>
-          <Route path='showroom/view-showroom' element={<ViewShowroom/>}></Route>
-          <Route path='showroom/update-showroom/:ShowroomID' element={<UpdateShowroom/>}></Route>
-          <Route path='furnitures' element={<ShowroomFurnitures/>}></Route>
-          <Route path='furnitures/add-furniture' element={<AddFurniture/>}></Route>
-          <Route path='furnitures/update-furniture' element={<UpdateFurniture/>}></Route>
-          <Route path='subscription' element={<ShowroomSubscription/>}></Route>
-          <Route path='settings' element={<ShowroomOwnerSettings/>}></Route>
-          <Route path='profile' element={<ShowrromOwnerProfile/>}></Route>
-          <Route path="*" element={<ShowroomMissing />} />
+        <Route
+          path="/showroomOwner"
+          element={
+            <ProtectedRoute requiredRole="Showroom Owner">
+              <ShowroomDash />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="showroom"
+            element={<ManageShowroom />}
+          ></Route>
+          <Route
+            path="showroom/view-showroom"
+            element={<ViewShowroom />}
+          ></Route>
+          <Route
+            path="showroom/update-showroom/:ShowroomID"
+            element={<UpdateShowroom />}
+          ></Route>
+          <Route
+            path="furnitures"
+            element={<ShowroomFurnitures />}
+          ></Route>
+          <Route
+            path="furnitures/add-furniture"
+            element={<AddFurniture />}
+          ></Route>
+          <Route
+            path="furnitures/update-furniture"
+            element={<UpdateFurniture />}
+          ></Route>
+          <Route
+            path="subscription"
+            element={<ShowroomSubscription />}
+          ></Route>
+          <Route
+            path="settings"
+            element={<ShowroomOwnerSettings />}
+          ></Route>
+          <Route
+            path="profile"
+            element={<ShowrromOwnerProfile />}
+          ></Route>
+          <Route
+            path="*"
+            element={<ShowroomMissing />}
+          />
         </Route>
         {/* End of the route Path for Showroom Owner */}
 
         {/* Route Path for Vehicle Owner */}
-        <Route path="/vehicleOwner">
-          <Route index element={<VehichleOwnerDash />}></Route>
-          <Route path='vehicles' element={<Vehicles/>}></Route>
-          <Route path='vehicles/add-vehicle' element={<AddVehicle/>}></Route>
-          <Route path='vehicles/update-vehicle' element={<UpdateVehicle/>}></Route>
-          <Route path='bookings' element={<VehicleBookings/>}></Route>
-          <Route path='revenue' element={<VehicleRevenue/>}></Route>
-          <Route path='settings' element={<VehicleOwnerSettings/>}></Route>
-          <Route path='profile' element={<VehicleOwnerProfile/>}></Route>
-          <Route path="*" element={<VehicleDashMissing />} />
+        <Route
+          path="/vehicleOwner"
+          element={
+            <ProtectedRoute requiredRole="Vehicle Owner">
+              <VehichleOwnerDash />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="vehicles"
+            element={<Vehicles />}
+          ></Route>
+          <Route
+            path="vehicles/add-vehicle"
+            element={<AddVehicle />}
+          ></Route>
+          <Route
+            path="vehicles/update-vehicle"
+            element={<UpdateVehicle />}
+          ></Route>
+          <Route
+            path="bookings"
+            element={<VehicleBookings />}
+          ></Route>
+          <Route
+            path="revenue"
+            element={<VehicleRevenue />}
+          ></Route>
+          <Route
+            path="settings"
+            element={<VehicleOwnerSettings />}
+          ></Route>
+          <Route
+            path="profile"
+            element={<VehicleOwnerProfile />}
+          ></Route>
+          <Route
+            path="*"
+            element={<VehicleDashMissing />}
+          />
         </Route>
         {/* End of the route Path for Vehicle Owner */}
 
-        <Route path="/lawyer">
-          <Route index element={<LawyerProfile/>}></Route>
-          <Route path='update-profile' element={<UpdateLawyerProfile/>}></Route>
-          <Route path='lsubscription' element={<SubscriptionLawyer/>}></Route>
-          <Route path='surviceLawyer' element={<SurviceListingLawyer/>}></Route>
+        <Route
+          path="/lawyer"
+          element={
+            <ProtectedRoute requiredRole="Lawyer">
+              <LawyerProfile />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="update-profile"
+            element={<UpdateLawyerProfile />}
+          ></Route>
+          <Route
+            path="lsubscription"
+            element={<SubscriptionLawyer />}
+          ></Route>
+          <Route
+            path="surviceLawyer"
+            element={<SurviceListingLawyer />}
+          ></Route>
         </Route>
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/forgetPassword" element={<ForgetPassword />} />
-        <Route path="/property" element={<Property />} />
-        <Route path="/transport" element={<Transport/>} />
-        <Route path="/showroom/:id" element={<Showroom/>} />
-        <Route path="/showroom" element={<Showroom/>} />
-        <Route path="/view-lawyer/:id" element={<Lawyer/>} />
-        <Route path="/vehicle" element={<Vehicle/>} />
-        <Route path="/showroom:id" element={<Showroom/>} />
-        <Route path="/view-lawyer" element={<Lawyer/>} />
-        <Route path="/vehicle/:id" element={<Vehicle/>} />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/signup"
+          element={<SignUp />}
+        />
+        <Route
+          path="/checkout"
+          element={<Checkout />}
+        />
+        <Route
+          path="/forgetPassword"
+          element={<ForgetPassword />}
+        />
+        <Route
+          path="/property"
+          element={<Property />}
+        />
+        <Route
+          path="/transport"
+          element={<Transport />}
+        />
+        <Route
+          path="/showroom/:id"
+          element={<Showroom />}
+        />
+        <Route
+          path="/showroom"
+          element={<Showroom />}
+        />
+        <Route
+          path="/view-lawyer/:id"
+          element={<Lawyer />}
+        />
+        <Route
+          path="/vehicle"
+          element={<Vehicle />}
+        />
+        <Route
+          path="/showroom:id"
+          element={<Showroom />}
+        />
+        <Route
+          path="/view-lawyer"
+          element={<Lawyer />}
+        />
+        <Route
+          path="/vehicle/:id"
+          element={<Vehicle />}
+        />
 
         {/* Footer Links */}
-        <Route path="/our-story" element={<Ourstory/>}/>
-        <Route path="/our-team" element={<Ourteam/>}/>
-        <Route path="/feedback" element={<Feedback/>}/>
-        <Route path="/contact-us" element={<ContactUs />} />
+        <Route
+          path="/our-story"
+          element={<Ourstory />}
+        />
+        <Route
+          path="/our-team"
+          element={<Ourteam />}
+        />
+        <Route
+          path="/feedback"
+          element={<Feedback />}
+        />
+        <Route
+          path="/contact-us"
+          element={<ContactUs />}
+        />
 
-        <Route path="/properties" element={<Allproperties/>} />
-        <Route path="/transports" element={<Alltransports/>}/>
-        <Route path="/lawyers" element={<Alllawyers/>}/>
-        <Route path="/showrooms" element={<Allshowrooms/>}/>
-        
-        <Route path="/blog" element={<Allblogs/>}/>
-        <Route path="blog/Artical" element={<Artical/>}/>
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/guidelines" element={<Guidelines/>}/>
-        <Route path="/support-center" element={<SupportCenter/>}/>
+        <Route
+          path="/properties"
+          element={<Allproperties />}
+        />
+        <Route
+          path="/transports"
+          element={<Alltransports />}
+        />
+        <Route
+          path="/lawyers"
+          element={<Alllawyers />}
+        />
+        <Route
+          path="/showrooms"
+          element={<Allshowrooms />}
+        />
+
+        <Route
+          path="/blog"
+          element={<Allblogs />}
+        />
+        <Route
+          path="blog/Artical"
+          element={<Artical />}
+        />
+        <Route
+          path="/faq"
+          element={<FaqPage />}
+        />
+        <Route
+          path="/guidelines"
+          element={<Guidelines />}
+        />
+        <Route
+          path="/support-center"
+          element={<SupportCenter />}
+        />
         {/* End of the Footer Links */}
 
         {/* Payment Form */}
-        <Route path="/payment/:role" element={<PaymentForm />} />
+        <Route
+          path="/payment/:role"
+          element={<PaymentForm />}
+        />
         {/* 404 Error Page */}
-        <Route path="*" element={<Missing />} />
-        <Route path="/unauthorized" element={<Missing />} />
-
-  
+        <Route
+          path="*"
+          element={<Missing />}
+        />
+        <Route
+          path="/unauthorized"
+          element={<Unauthorized />}
+        />
       </Routes>
     </div>
   );
