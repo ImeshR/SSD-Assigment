@@ -6,6 +6,7 @@ import { UserContext } from "../hooks/UserContext";
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { user, isLoading } = useContext(UserContext);
 
+  console.log(user);
   if (isLoading) {
     return <div>Loading...</div>; 
   }

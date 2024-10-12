@@ -30,6 +30,8 @@ const Login = () => {
         const role = await login(values.email, values.password);
         setIsLoading(false);
 
+        console.log(role);
+
         Swal.fire({
           icon: "success",
           title: "Success",
@@ -68,6 +70,7 @@ const Login = () => {
   };
 
   const navigateBasedOnRole = (role) => {
+    console.log('test user role' ,role);
     switch (role) {
       case "Regular User":
         navigate("/customer");
@@ -85,7 +88,7 @@ const Login = () => {
         navigate("/lawyer");
         break;
       case "Site Owner":
-        navigate("/siteOwner");
+        navigate("/siteowner");
         break;
       default:
         navigate("/");

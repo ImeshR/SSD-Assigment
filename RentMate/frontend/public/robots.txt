@@ -1,3 +1,18 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /customer/setting/
+Disallow: /customer/payment/
+Disallow: /customer/report/
+Disallow: /siteowner/settings/
+Disallow: /siteowner/profile/
+Disallow: /landlord/settings/
+Disallow: /landlord/profile/
+Disallow: /vehicleOwner/settings/
+Disallow: /vehicleOwner/profile/
+Disallow: /showroomOwner/settings/
+Disallow: /showroomOwner/profile/
+Disallow: /login
+Disallow: /signup
+Disallow: /unauthorized
+Disallow: /404
+
+Allow: /

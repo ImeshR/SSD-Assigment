@@ -103,7 +103,7 @@ function App() {
         <Route
           path="/siteowner"
           element={
-            <ProtectedRoute requiredRole="siteowner">
+            <ProtectedRoute requiredRole="Site Owner">
               <MainDashboard />
             </ProtectedRoute>
           }
